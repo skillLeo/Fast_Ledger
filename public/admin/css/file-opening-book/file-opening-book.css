@@ -1,0 +1,646 @@
+/* ========================================
+   FILE OPENING BOOK STYLES
+   ======================================== */
+
+/* ============ Dropdowns ============ */
+/* ============ Dropdowns ============ */
+/* Add more specific selector */
+.split-dropdown-wrapper.split-dropdown-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    box-shadow: none !important;
+    transition: all 0.3s ease;
+    border: 1px solid #dee2e6 !important;
+}
+
+.split-dropdown-wrapper.split-dropdown-wrapper.active {
+    box-shadow: 0 0 0 3px rgba(233, 235, 235, 0.25), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+/* ============ Search Input ============ */
+.search-input {
+    box-shadow: none !important;
+    transition: all 0.3s ease;
+    border: 0.2px solid #5c595a !important;
+}
+
+.search-input:focus,
+.search-input:active {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(230, 228, 228, 0.25), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid #13667d !important;
+}
+
+/* ============ Split Dropdown Button ============ */
+.split-dropdown-btn {
+    width: 100%;
+    background-color: white;
+    border: 0.2px solid #5c595a !important;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    cursor: pointer;
+    height: 29px;
+    box-shadow: none !important;
+}
+
+.split-dropdown-btn:focus {
+    outline: none;
+    box-shadow: none !important;
+}
+
+.dropdown-text {
+    flex: 1;
+    min-width: 0;
+    background-color: white;
+    color: #757575;
+    padding: 0px 8px;
+    font-size: 12px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 1px solid #e0e0e0;
+}
+
+.dropdown-icon {
+    border: #13667d;
+    background-color: #13667d;
+    color: white;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    flex-shrink: 0;
+}
+
+.dropdown-icon i {
+    font-size: 11px;
+}
+
+.split-dropdown-btn:hover .dropdown-text {
+    background-color: #f8f9fa;
+}
+
+.split-dropdown-btn:hover .dropdown-icon {
+    background-color: #0f5265;
+}
+
+.split-dropdown-btn::after {
+    display: none !important;
+}
+
+.split-dropdown-wrapper .dropdown-menu {
+    border-radius: 0;
+    margin-top: 0;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.split-dropdown-wrapper .dropdown-item {
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #333;
+    transition: all 0.2s;
+}
+
+.split-dropdown-wrapper .dropdown-item:hover {
+    background-color: #13667d;
+    color: white;
+}
+
+/* ============ Navigation Links ============ */
+.nav-link-btn {
+    padding: 0;
+    font-size: 13px;
+    text-decoration: none;
+    color: #666;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.nav-link-btn:hover {
+    color: #13667d;
+    border-bottom-color: #13667d;
+}
+
+.nav-link-btn.active {
+    color: #13667d;
+    border-bottom-color: #13667d;
+    font-weight: 500;
+}
+
+/* ============ Main Layout ============ */
+.main-content {
+    padding: 20px;
+}
+
+.content-section {
+    display: flex;
+    gap: 31px;
+}
+
+/* ============ Left Side - Ledger Table ============ */
+.left-side {
+    width: 32%;
+    flex-shrink: 0;
+    position: relative;
+    transition: width 0.3s ease; /* Smooth transition */
+}
+
+/* Adjust width for Suppliers and Employees sections */
+.left-side.narrow {
+    width: 22%;
+}
+
+.ledger-table-container {
+    width: 100%;
+    background-color: #fff;
+    padding: 8px;
+}
+
+.left-side .account-table thead {
+    background: #fff;
+}
+
+.left-side .account-table thead th {
+    background: #dff3f9 !important;
+    border-top: 1px solid #dee2e6 !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+/* Adjust right side accordingly */
+.right-side {
+    background-color: #fff;
+    flex: 1;
+    min-width: 0;
+    padding: 4px;
+    position: relative;
+    transition: flex 0.3s ease; /* Smooth transition */
+}
+/* ============ Ledger Table Body with Scroll ============ */
+.ledger-tbody-wrapper {
+    max-height: calc(100vh - 230px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.ledger-tbody-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ledger-tbody-wrapper::-webkit-scrollbar-thumb {
+    background: #c0c1c2;
+    border-radius: 4px;
+}
+
+.ledger-tbody-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #c7c7c7;
+}
+
+.left-side .account-table {
+    margin-bottom: 0 !important;
+}
+
+.ledger-tbody-wrapper .account-table {
+    margin-bottom: 0 !important;
+}
+
+/* ============ Right Side - Details ============ */
+.right-side {
+    background-color: #fff;
+    flex: 1;
+    min-width: 0;
+    padding: 4px;
+    position: relative;
+}
+
+/* ============ Client Info Section ============ */
+.client-info-section {
+    padding-bottom: 12px;
+}
+
+.client-info-section h5 {
+    margin-bottom: 8px;
+}
+
+.client-info-section small {
+    font-size: 13px;
+}
+
+/* ============ Tables Container ============ */
+#tables-container {
+    position: relative;
+    max-height: calc(100vh - 340px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#tables-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#tables-container::-webkit-scrollbar-thumb {
+    background: #c0c1c2;
+    border-radius: 4px;
+}
+
+#tables-container::-webkit-scrollbar-thumb:hover {
+    background: #c7c7c7;
+}
+
+/* ============ Account Table Styles ============ */
+.account-table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/* ============ Sticky Header ============ */
+#tables-container .account-table thead {
+    position: sticky;
+    top: 0;
+}
+
+#tables-container .account-table thead tr:first-child th {
+    position: sticky;
+    top: 0;
+    z-index: 22;
+    border-top: 1px solid #dee2e6 !important;
+    background: #dff3f9 !important;
+}
+
+#tables-container .account-table thead tr:last-child th {
+    position: sticky;
+    top: 0px;
+}
+
+#tables-container .account-table thead th {
+    border: 1px solid #dee2e6 !important;
+}
+
+/* ============ Table Headers ============ */
+.account-table thead th {
+    background: #dff3f9 !important;
+    padding: 6px 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    text-align: center;
+    font-family: 'Mona Sans', sans-serif;
+    font-weight: 500;
+    border: 1px solid #dee2e6 !important;
+}
+
+#tables-container th.details-head,
+#tables-container th.office-head,
+#tables-container th.client-head {
+    font-family: 'Mona Sans', sans-serif;
+    font-weight: 500;
+}
+
+.account-table tbody td {
+    padding: 5px 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+.account-table tbody tr.table-active,
+.account-table tbody tr.table-active td {
+    --bs-table-bg-state: #f8f8fa !important;
+    color: #000 !important;
+}
+
+/* ============ Column Alignment ============ */
+.account-table td:nth-child(2),
+.account-table td:nth-child(3) {
+    text-align: right !important;
+}
+
+#tables-container .office-head,
+#tables-container .client-head {
+    text-align: right !important;
+}
+
+#tables-container tbody td:nth-child(3),
+#tables-container tbody td:nth-child(4),
+#tables-container tbody td:nth-child(5),
+#tables-container tbody td:nth-child(6),
+#tables-container tbody td:nth-child(7),
+#tables-container tbody td:nth-child(8) {
+    text-align: right;
+}
+
+.table tbody td[data-column="description"] {
+    max-width: 250px;
+}
+
+/* ============ Header Styles ============ */
+#tables-container th.details-head {
+    background: #dff3f9 !important;
+    text-align: center !important;
+    padding: 4px !important;
+}
+
+#tables-container th.office-head {
+    background: #dff3f9 !important;
+    padding: 4px !important;
+    text-align: center !important;
+}
+
+#tables-container th.client-head {
+    background: #dff3f9 !important;
+    padding: 4px !important;
+    text-align: center !important;
+}
+
+/* ============ Default Message ============ */
+#default-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #6c757d;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mx-custom {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* ============ Responsive Design ============ */
+@media (max-width: 1400px) {
+    .left-side {
+        width: 28%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .content-section {
+        flex-direction: column;
+    }
+
+    .left-side {
+        width: 100%;
+        max-height: 300px;
+        margin-bottom: 15px;
+    }
+
+    .right-side {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .row.align-items-end {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .row.align-items-end>[class*="col-"] {
+        width: 100% !important;
+        padding: 8px 12px;
+    }
+
+    .d-flex.gap-1 {
+        flex-direction: column;
+        gap: 8px !important;
+    }
+
+    .nav-link-btn {
+        font-size: 12px;
+    }
+
+    .left-side {
+        max-height: 250px;
+    }
+
+    .ledger-table-container {
+        width: 100% !important;
+    }
+
+    .account-table thead th,
+    .account-table tbody td {
+        font-size: 10px;
+        padding: 3px 2px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content {
+        padding: 10px;
+    }
+
+    .account-table thead th,
+    .account-table tbody td {
+        font-size: 9px;
+        padding: 2px 1px;
+    }
+
+    .client-info-section small {
+        font-size: 11px;
+    }
+}
+
+
+/* Force proper display for action buttons */
+.action-buttons-group {
+    gap: 0.5rem;
+}
+
+.action-buttons-group.d-flex {
+    display: flex !important;
+}
+
+.action-buttons-group.d-none {
+    display: none !important;
+}
+
+#matter-filters.d-none {
+    display: none !important;
+}
+
+#matter-filters.d-flex {
+    display: flex !important;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+
+
+
+/* ============ Dynamic Filter Alignment ============ */
+.filters-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 32%; /* Default width matching matters table */
+    transition: width 0.3s ease;
+}
+
+/* Adjust filters width when left-side is narrow (Suppliers/Employees) */
+.left-side.narrow ~ .filters-wrapper,
+body:has(.left-side.narrow) .filters-wrapper {
+    width: 22%;
+}
+
+/* Make search input flexible to fill available space */
+#matter-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+}
+
+.search-input-wrapper .input-group {
+    width: 100% !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+    .filters-wrapper {
+        width: 28%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .filters-wrapper {
+        width: 100%;
+    }
+}
+
+
+/* Employee Main Tabs Styling */
+.employee-main-tabs {
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 0;
+}
+
+.employee-main-tabs .nav-item {
+    margin-bottom: -2px;
+}
+
+.employee-main-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #6c757d;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.employee-main-tabs .nav-link:hover {
+    color: #13667d;
+    background: #f8f9fa;
+}
+
+.employee-main-tabs .nav-link.active {
+    color: #13667d;
+    font-weight: 600;
+    border-bottom: 2px solid #13667d !important;
+    background: transparent;
+}
+
+/* Action Buttons Styling */
+#employee-action-buttons .btn {
+    padding: 6px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+#employee-action-buttons .btn-primary {
+    background: #13667d;
+    border-color: #13667d;
+}
+
+#employee-action-buttons .btn-primary:hover {
+    background: #0f4f5f;
+    border-color: #0f4f5f;
+}
+
+#employee-action-buttons .btn-danger:hover {
+    background: #c82333;
+    border-color: #bd2130;
+}
+
+
+
+/* Edit Mode Styling */
+#employee-details-form.edit-mode {
+    border-left: 4px solid #28a745;
+    padding-left: 15px;
+    transition: all 0.3s ease;
+}
+
+#employee-details-form.edit-mode::before {
+    content: '✏️ EDITING MODE';
+    display: block;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 10px 16px;
+    margin: -15px -15px 20px -19px;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.employee-form-field:not([readonly]):not([disabled]) {
+    border-color: #28a745 !important;
+    background-color: #fff !important;
+    box-shadow: 0 0 0 0.1rem rgba(40, 167, 69, 0.15);
+    transition: all 0.2s ease;
+}
+
+.employee-form-field:not([readonly]):not([disabled]):focus {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25) !important;
+}
+
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}

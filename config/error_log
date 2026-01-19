@@ -1,0 +1,80 @@
+[11-Sep-2025 05:50:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/filesystems.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/filesystems.php on line 16
+[14-Sep-2025 08:01:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/services.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/services.php on line 18
+[14-Sep-2025 08:01:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/session.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/session.php on line 21
+[14-Sep-2025 08:01:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/database.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/database.php on line 19
+[14-Sep-2025 08:01:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/cache.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/cache.php on line 18
+[14-Sep-2025 08:01:15 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/queue.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/queue.php on line 16
+[14-Sep-2025 08:01:16 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/mail.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/mail.php on line 17
+[14-Sep-2025 08:01:16 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/auth.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/auth.php on line 17
+[14-Sep-2025 08:01:16 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/app.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/app.php on line 16
+[14-Sep-2025 08:01:16 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/filesystems.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/filesystems.php on line 16
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/app.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/app.php on line 16
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/database.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/database.php on line 19
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/mail.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/mail.php on line 17
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/cache.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/cache.php on line 18
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/filesystems.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/filesystems.php on line 16
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/queue.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/queue.php on line 16
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/auth.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/auth.php on line 17
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/services.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/services.php on line 18
+[23-Sep-2025 23:25:18 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/session.php:21
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/session.php on line 21
+[11-Nov-2025 19:13:42 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/fastulpi/public_html/config/database.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/config/database.php on line 19

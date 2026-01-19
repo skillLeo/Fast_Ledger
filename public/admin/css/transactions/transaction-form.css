@@ -1,0 +1,621 @@
+/* ========================================================================
+   COMPLETE SORTABLE & NOTES EDITOR STYLES - ELLIPSIS FIX
+   ======================================================================== */
+
+.drag-handle {
+    cursor: grab !important;
+    transition: all 0.2s ease;
+}
+
+.drag-handle:hover {
+    color: #007bff !important;
+    transform: scale(1.1);
+}
+
+.drag-handle:active {
+    cursor: grabbing !important;
+}
+
+/* Better table row dragging experience */
+#invoiceItemsTable tr,
+#journalRows tr {
+    transition: all 0.2s ease;
+}
+
+#invoiceItemsTable tr:hover,
+#journalRows tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Collapsible Notes Editor Styles */
+.notes-history {
+    margin-bottom: 20px;
+}
+
+.notes-history-content {
+    min-height: 120px;
+    padding: 4px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notes-history-content:empty:before {
+    content: "No notes added yet...";
+    color: #6c757d;
+    font-style: italic;
+}
+
+.notes-history-content table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.add-note-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.add-note-btn:hover {
+    background: linear-gradient(135deg, #218838 0%, #1fa085 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.add-note-btn.active {
+    background: linear-gradient(135deg, #dc3545 0%, #e63946 100%);
+}
+
+.add-note-btn.active:hover {
+    background: linear-gradient(135deg, #c82333 0%, #d52534 100%);
+}
+
+.add-note-section {
+    margin-top: 15px;
+    padding: 5px;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    background: #fdfdfe;
+    display: none;
+    animation: slideDown 0.3s ease;
+}
+
+.add-note-section.show {
+    display: block;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notes-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 5px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    flex-wrap: wrap;
+}
+
+.table-insert-container {
+    position: relative;
+    display: inline-block;
+}
+
+.table-insert-btn {
+    background: #4285f4;
+    border: none;
+    color: white;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.table-insert-btn:hover {
+    background: #3367d6;
+    color: white;
+}
+
+.grid-selector {
+    position: absolute !important;
+    top: calc(100% + 5px) !important;
+    left: 0 !important;
+    background: white !important;
+    border: 2px solid #4285f4 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+    padding: 12px !important;
+    display: none !important;
+    z-index: 9999 !important;
+    min-width: 280px !important;
+}
+
+.grid-selector.show {
+    display: block !important;
+}
+
+.table-insert-container {
+    position: relative !important;
+    display: inline-block !important;
+}
+
+.grid-container {
+    display: grid !important;
+    grid-template-columns: repeat(10, 20px) !important;
+    gap: 3px !important;
+    margin-bottom: 12px !important;
+    background: #f0f0f0 !important;
+    padding: 5px !important;
+    border-radius: 4px !important;
+}
+
+.grid-cell {
+    width: 20px !important;
+    height: 20px !important;
+    border: 2px solid #d1d5db !important;
+    background: white !important;
+    cursor: pointer !important;
+    transition: all 0.1s !important;
+    box-sizing: border-box !important;
+}
+
+.grid-cell:hover,
+.grid-cell.highlight {
+    background: #4285f4 !important;
+    border-color: #4285f4 !important;
+    transform: scale(1.1) !important;
+}
+
+.grid-title {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    margin-bottom: 10px !important;
+    text-align: center !important;
+    background: #f8f9fa !important;
+    padding: 5px !important;
+    border-radius: 4px !important;
+}
+
+.grid-info {
+    text-align: center !important;
+    font-size: 12px !important;
+    color: #666 !important;
+    margin-bottom: 10px !important;
+    min-height: 18px !important;
+}
+
+.custom-table-btn {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #4285f4;
+    background: white;
+    color: #4285f4;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.custom-table-btn:hover {
+    background: #4285f4;
+    color: white;
+}
+
+.format-btn {
+    background: white;
+    border: 1px solid #dee2e6;
+    color: #666;
+    padding: 3px 4px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 32px;
+    text-align: center;
+}
+
+.format-btn:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+.format-btn.active {
+    background: #e3f2fd;
+    border-color: #4285f4;
+    color: #4285f4;
+}
+
+.rich-text-editor {
+    min-height: 200px;
+    padding: 4px;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    background: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.rich-text-editor:focus {
+    outline: none;
+    border-color: #4285f4;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+}
+
+.rich-text-editor:empty:before {
+    content: "Start typing your note here...";
+    color: #6c757d;
+    font-style: italic;
+}
+
+.rich-text-editor:focus:before {
+    display: none;
+}
+
+/* ========================================================================
+   TABLE STYLES - CRITICAL FIX FOR ELLIPSIS DURING TYPING
+   ======================================================================== */
+
+.rich-text-editor table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+    table-layout: fixed !important;
+}
+
+/* ✅ DEFAULT STATE (BLUR): Hide overflow with ellipsis */
+.rich-text-editor table th,
+.rich-text-editor table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: middle;
+    height: 40px;
+    max-height: 40px;
+    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+}
+
+/* ✅ Apply ellipsis ONLY when NOT focused */
+.rich-text-editor table th:not(:focus),
+.rich-text-editor table td:not(:focus) {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.rich-text-editor table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.rich-text-editor table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.rich-text-editor table tr:hover {
+    background: #e3f2fd;
+}
+
+/* ✅ CRITICAL FIX: When focused, COMPLETELY remove ellipsis and enable scroll */
+.rich-text-editor table td[contenteditable]:focus,
+.rich-text-editor table th[contenteditable]:focus {
+    background: #fff3cd !important;
+    outline: 2px solid #ffc107 !important;
+    outline-offset: -1px !important;
+    
+    /* ✅ KEY: Remove ALL ellipsis properties */
+    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    
+    z-index: 10 !important;
+    position: relative !important;
+}
+
+/* ✅ Scrollbar styling */
+.rich-text-editor table td[contenteditable]:focus::-webkit-scrollbar,
+.rich-text-editor table th[contenteditable]:focus::-webkit-scrollbar {
+    height: 4px;
+}
+
+.rich-text-editor table td[contenteditable]:focus::-webkit-scrollbar-thumb,
+.rich-text-editor table th[contenteditable]:focus::-webkit-scrollbar-thumb {
+    background: #ffc107;
+    border-radius: 2px;
+}
+
+/* ✅ TOOLTIP STYLES */
+.cell-tooltip {
+    position: fixed;
+    background: #333;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 300px;
+    word-wrap: break-word;
+    white-space: normal;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.cell-tooltip.show {
+    opacity: 0.95;
+}
+
+.cell-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 10px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid #333;
+}
+
+.cell-tooltip.tooltip-top::before {
+    top: auto;
+    bottom: -4px;
+    border-bottom: none;
+    border-top: 4px solid #333;
+}
+
+/* ✅ NOTES HISTORY TABLE - Same fix */
+.notes-history-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    table-layout: fixed !important;
+}
+
+.notes-history-content table th,
+.notes-history-content table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: middle;
+    height: 40px;
+    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+
+.notes-history-content table th {
+    background: #e9ecef;
+    font-weight: 600;
+    color: #495057;
+}
+
+.notes-history-content table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.note-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid #dee2e6;
+}
+
+.cancel-note-btn {
+    background: #6c757d;
+    border: none;
+    color: white;
+    padding: 4px 4px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancel-note-btn:hover {
+    background: #5a6268;
+}
+
+.custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.custom-modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.form-row label {
+    min-width: 80px;
+    font-weight: 500;
+}
+
+.form-row input {
+    flex: 1;
+    padding: 4px 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.success-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 5px 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 3000;
+}
+
+.success-message.show {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Notes History Wrapper */
+.notes-history-wrapper {
+    margin-bottom: 15px;
+}
+
+.note-item {
+    position: relative;
+    margin-top: 15px;
+    padding: 15px;
+    padding-top: 45px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: #f8f9fa;
+}
+
+.note-item:first-child {
+    margin-top: 0;
+}
+
+.note-actions-bar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.note-edit-btn,
+.note-delete-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.note-edit-btn {
+    background: #007bff;
+    color: white;
+}
+
+.note-edit-btn:hover {
+    background: #0056b3;
+}
+
+.note-delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.note-delete-btn:hover {
+    background: #c82333;
+}
+
+.note-timestamp {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    font-style: italic;
+}

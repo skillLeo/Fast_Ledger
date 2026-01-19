@@ -1,0 +1,50 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # -----------------------------------------
+    # 🔒 Force HTTPS
+    # -----------------------------------------
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # -----------------------------------------
+    # 🟦 Public asset fix
+    # Allows URLs like: /admin/js/... /admin/css/... without /public
+    # -----------------------------------------
+    RewriteCond %{REQUEST_URI} ^/admin/
+    RewriteRule ^admin/(.*)$ public/admin/$1 [L]
+
+    # -----------------------------------------
+    # 📦 Storage asset fix
+    # Allows URLs like: /storage/... (Laravel symlink)
+    # -----------------------------------------
+    RewriteCond %{REQUEST_URI} ^/storage/
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
+    # -----------------------------------------
+    # 🚫 Disable directory listing + MultiViews
+    # -----------------------------------------
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    # -----------------------------------------
+    # 🔑 Authorization header handling
+    # -----------------------------------------
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # -----------------------------------------
+    # 🧹 Remove trailing slashes
+    # -----------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # -----------------------------------------
+    # 🚀 Laravel front controller
+    # -----------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

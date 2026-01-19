@@ -1,0 +1,510 @@
+@php
+    $propertyType = $propertyType ?? null;
+    $existingData = $existingData ?? [];
+
+    // For TY 2024-25: Use fhl_ or non_fhl_ prefix
+    // For TY 2025-26+: Use allowances (no prefix, unified)
+    // For TY < 2024-25: Use fhl_ or non_fhl_ prefix
+    $fieldPrefix = $propertyType ? "{$propertyType}_allowances" : 'allowances';
+    $idPrefix = $propertyType ? "{$propertyType}_all" : 'all';
+@endphp
+
+<div class="alert alert-info mb-4">
+    <i class="fas fa-info-circle me-2"></i>
+    @if($propertyType === 'fhl')
+        Claim capital allowances for your FHL (Furnished Holiday Lettings) property assets and improvements.
+    @elseif($propertyType === 'non_fhl')
+        Claim capital allowances for your Non-FHL (Non-Furnished Holiday Lettings) property assets and improvements.
+    @else
+        Claim capital allowances for property business assets and improvements.
+    @endif
+</div>
+
+    <!-- Property Income Allowance Section (All Tax Years) -->
+    <div id="property-income-section" class="mb-4">
+        <div class="alert alert-info border-start border-4 border-info bg-light mb-4">
+            <i class="fas fa-info-circle me-2 text-info"></i>
+            <strong>Property Income Allowance</strong> - Claim up to £1,000 as a simple allowance. This is mutually exclusive with other capital allowances below.
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <label for="{{ $idPrefix }}_property_income_allowance" class="form-label">
+                    Property Income Allowance
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="£1,000 tax-free property allowance. Cannot be used with other capital allowances."></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[property_income_allowance]" id="{{ $idPrefix }}_property_income_allowance"
+                           class="form-control @error("{$fieldPrefix}.property_income_allowance") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.property_income_allowance") }}"
+                           step="0.01" min="0" max="1000"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">£1,000 tax-free property allowance. Cannot be used with other capital allowances.</small>
+                <div><small class="text-danger fw-bold">Maximum £1,000</small></div>
+                @error("{$fieldPrefix}.property_income_allowance")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="text-center my-4">
+        <div class="d-inline-block px-3 py-2 bg-light rounded">
+            <strong class="text-muted">OR</strong>
+        </div>
+    </div>
+
+    <!-- Other Capital Allowances Section -->
+    <div id="other-allowances-section">
+        <h5 class="section-heading mb-3">Other Capital Allowances</h5>
+        <div class="row g-4">
+            <!-- Annual Investment Allowance -->
+            <div class="col-md-6">
+                <label for="allowances_annual_investment_allowance" class="form-label">
+                    Annual Investment Allowance
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="100% allowance on qualifying plant and machinery"></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[annual_investment_allowance]" id="{{ $idPrefix }}_annual_investment_allowance"
+                           class="form-control @error("{$fieldPrefix}.annual_investment_allowance") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.annual_investment_allowance") }}"
+                           step="0.01" min="0" max="99999999999.99"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">100% allowance on qualifying plant and machinery</small>
+                @error("{$fieldPrefix}.annual_investment_allowance")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Business Premises Renovation Allowance -->
+            <div class="col-md-6">
+                <label for="allowances_business_premises_renovation_allowance" class="form-label">
+                    Business Premises Renovation Allowance
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="100% allowance for renovating business premises in disadvantaged areas"></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[business_premises_renovation_allowance]" id="{{ $idPrefix }}_business_premises_renovation_allowance"
+                           class="form-control @error("{$fieldPrefix}.business_premises_renovation_allowance") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.business_premises_renovation_allowance") }}"
+                           step="0.01" min="0" max="99999999999.99"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">100% allowance for renovating business premises in disadvantaged areas</small>
+                @error("{$fieldPrefix}.business_premises_renovation_allowance")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Other Capital Allowance -->
+            <div class="col-md-6">
+                <label for="allowances_other_capital_allowance" class="form-label">
+                    Other Capital Allowance
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="Other capital allowances not covered elsewhere"></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[other_capital_allowance]" id="{{ $idPrefix }}_other_capital_allowance"
+                           class="form-control @error("{$fieldPrefix}.other_capital_allowance") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.other_capital_allowance") }}"
+                           step="0.01" min="0" max="99999999999.99"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">Other capital allowances not covered elsewhere</small>
+                @error("{$fieldPrefix}.other_capital_allowance")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Cost of Replacing Domestic Goods - Non-FHL ONLY -->
+            @if($propertyType === 'non_fhl' || !$propertyType)
+            <div class="col-md-6">
+                <label for="{{ $idPrefix }}_cost_of_replacing_domestic_goods" class="form-label">
+                    Cost of Replacing Domestic Items
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="Replacement of domestic items in residential properties (Non-FHL only)"></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[cost_of_replacing_domestic_goods]" id="{{ $idPrefix }}_cost_of_replacing_domestic_goods"
+                           class="form-control @error("{$fieldPrefix}.cost_of_replacing_domestic_goods") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.cost_of_replacing_domestic_goods") }}"
+                           step="0.01" min="0" max="99999999999.99"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">Replacement of domestic items in residential properties (Non-FHL only)</small>
+                @error("{$fieldPrefix}.cost_of_replacing_domestic_goods")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+            @endif
+
+            <!-- Zero Emissions Car Allowance -->
+            <div class="col-md-6">
+                <label for="allowances_zero_emissions_car_allowance" class="form-label">
+                    Zero Emissions Car Allowance
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="100% first year allowance for zero emission cars"></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[zero_emissions_car_allowance]" id="{{ $idPrefix }}_zero_emissions_car_allowance"
+                           class="form-control @error("{$fieldPrefix}.zero_emissions_car_allowance") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.zero_emissions_car_allowance") }}"
+                           step="0.01" min="0" max="99999999999.99"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">100% first year allowance for zero emission cars</small>
+                @error("{$fieldPrefix}.zero_emissions_car_allowance")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Zero Emissions Goods Vehicle Allowance (Hidden for TY 2024-25+) -->
+            <div class="col-md-6 pre-ty-2024-25-field">
+                <label for="{{ $idPrefix }}_zero_emissions_goods_vehicle_allowance" class="form-label">
+                    Zero Emissions Goods Vehicle Allowance
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="100% first year allowance for zero emission goods vehicles"></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[zero_emissions_goods_vehicle_allowance]" id="{{ $idPrefix }}_zero_emissions_goods_vehicle_allowance"
+                           class="form-control @error("{$fieldPrefix}.zero_emissions_goods_vehicle_allowance") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.zero_emissions_goods_vehicle_allowance") }}"
+                           step="0.01" min="0" max="99999999999.99"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">100% first year allowance for zero emission goods vehicles</small>
+                @error("{$fieldPrefix}.zero_emissions_goods_vehicle_allowance")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Electric Charge Point Allowance -->
+            <div class="col-md-6">
+                <label for="{{ $idPrefix }}_electric_charge_point_allowance" class="form-label">
+                    Electric Charge Point Allowance
+                    <i class="fas fa-info-circle text-muted ms-1" data-bs-toggle="tooltip" title="100% first year allowance for electric vehicle charge points"></i>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">£</span>
+                    <input type="number" name="{{ $fieldPrefix }}[electric_charge_point_allowance]" id="{{ $idPrefix }}_electric_charge_point_allowance"
+                           class="form-control @error("{$fieldPrefix}.electric_charge_point_allowance") is-invalid @enderror"
+                           value="{{ old("{$fieldPrefix}.electric_charge_point_allowance") }}"
+                           step="0.01" min="0" max="99999999999.99"
+                           placeholder="0.00">
+                </div>
+                <small class="text-muted">100% first year allowance for electric vehicle charge points</small>
+                @error("{$fieldPrefix}.electric_charge_point_allowance")
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+
+        <!-- Structured Building Allowances (TY 2024-25+ Non-FHL ONLY) -->
+        @if($propertyType === 'non_fhl' || !$propertyType)
+        <div class="ty-2024-25-fields mt-5" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h3 class="section-heading mb-1">Structured Building Allowances</h3>
+                    <p class="text-muted small mb-0">Array format for TY 2024-25+. Each building requires amount and at least one building field. (Non-FHL only)</p>
+                </div>
+                <button type="button" class="btn btn-outline-hmrc btn-sm" id="add-sba-{{ $propertyType ?? 'default' }}">
+                    <i class="fas fa-plus me-1"></i> Add Building
+                </button>
+            </div>
+            <div id="sba-container-{{ $propertyType ?? 'default' }}">
+                <!-- SBA entries will be added here dynamically -->
+            </div>
+        </div>
+
+        <!-- Enhanced Structured Building Allowances (TY 2024-25+ Non-FHL ONLY) -->
+        <div class="ty-2024-25-fields mt-4" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h3 class="section-heading mb-1">Enhanced Structured Building Allowances</h3>
+                    <p class="text-muted small mb-0">Enhanced rate for structures and buildings (TY 2024-25+, Non-FHL only)</p>
+                </div>
+                <button type="button" class="btn btn-outline-hmrc btn-sm" id="add-esba-{{ $propertyType ?? 'default' }}">
+                    <i class="fas fa-plus me-1"></i> Add Building
+                </button>
+            </div>
+            <div id="esba-container-{{ $propertyType ?? 'default' }}">
+                <!-- ESBA entries will be added here dynamically -->
+            </div>
+        </div>
+        @endif
+    </div>
+
+@push('styles')
+<style>
+/* Allowance Type Card Selector */
+.allowance-type-card {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 100%;
+}
+
+.allowance-type-card:hover {
+    border-color: #17848e;
+    background: #f8f9fa;
+}
+
+.btn-check:checked + .allowance-type-card {
+    border-color: #17848e;
+    background: #e8f4f6;
+}
+
+.allowance-type-icon {
+    width: 48px;
+    height: 48px;
+    background: #e8f4f6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.allowance-type-icon i {
+    color: #17848e;
+    font-size: 1.25rem;
+}
+
+.btn-check:checked + .allowance-type-card .allowance-type-icon {
+    background: #17848e;
+}
+
+.btn-check:checked + .allowance-type-card .allowance-type-icon i {
+    color: white;
+}
+
+.allowance-type-content {
+    flex: 1;
+}
+
+.allowance-type-title {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.25rem;
+}
+
+.btn-check:checked + .allowance-type-card .allowance-type-title {
+    color: #17848e;
+}
+
+.allowance-type-desc {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Outline HMRC Button */
+.btn-outline-hmrc {
+    color: #17848e;
+    border-color: #17848e;
+    background: white;
+}
+
+.btn-outline-hmrc:hover {
+    color: white;
+    background: #17848e;
+    border-color: #17848e;
+}
+
+/* Pre TY 2024-25 fields */
+.pre-ty-2024-25-field {
+    display: block;
+}
+</style>
+@endpush
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle mutual exclusivity for Property Income Allowance
+    // This applies to all tax years and all property types
+    setupPropertyIncomeAllowanceMutualExclusivity('{{ $idPrefix }}', '{{ $fieldPrefix }}');
+});
+
+function setupPropertyIncomeAllowanceMutualExclusivity(idPrefix, fieldPrefix) {
+    const propertyIncomeInput = document.getElementById(`${idPrefix}_property_income_allowance`);
+
+    if (!propertyIncomeInput) {
+        return; // Field doesn't exist for this property type/tax year
+    }
+
+    // Get the parent container (either in property-income-section or other-allowances-section)
+    const formStep = propertyIncomeInput.closest('.form-step, .tab-pane, .flat-structure');
+    if (!formStep) return;
+
+    // Get all other allowance inputs in the same section (exclude property_income_allowance itself)
+    const otherAllowanceInputs = Array.from(formStep.querySelectorAll('input[type="number"]'))
+        .filter(input => {
+            const name = input.getAttribute('name');
+            return name &&
+                   name.includes(fieldPrefix) &&
+                   !name.includes('property_income_allowance') &&
+                   !name.includes('building_'); // Exclude building-specific fields
+        });
+
+    // Function to check if property income allowance has a value
+    function hasPropertyIncomeValue() {
+        return propertyIncomeInput.value && parseFloat(propertyIncomeInput.value) > 0;
+    }
+
+    // Function to check if any other allowance has a value
+    function hasOtherAllowanceValues() {
+        // Check standard allowance inputs
+        const hasStandardValues = otherAllowanceInputs.some(input => input.value && parseFloat(input.value) > 0);
+
+        // Check dynamically added SBA/ESBA inputs
+        const sbaContainers = formStep.querySelectorAll('[id^="sba-container-"], [id^="esba-container-"]');
+        let hasBuildingAllowanceValues = false;
+
+        sbaContainers.forEach(container => {
+            const buildingInputs = container.querySelectorAll('input[type="number"]');
+            buildingInputs.forEach(input => {
+                if (input.value && parseFloat(input.value) > 0) {
+                    hasBuildingAllowanceValues = true;
+                }
+            });
+        });
+
+        return hasStandardValues || hasBuildingAllowanceValues;
+    }
+
+    // Function to disable/enable fields based on property income allowance
+    function updateFieldStates() {
+        if (hasPropertyIncomeValue()) {
+            // Make other allowance fields readonly (not disabled, so they can still be submitted)
+            otherAllowanceInputs.forEach(input => {
+                input.setAttribute('readonly', 'readonly');
+                input.style.opacity = '0.5';
+                input.style.cursor = 'not-allowed';
+                input.style.backgroundColor = '#e9ecef';
+            });
+
+            // Disable SBA/ESBA add buttons
+            const addButtons = formStep.querySelectorAll('[id^="add-sba-"], [id^="add-esba-"]');
+            addButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            });
+
+            // Show info message
+            showMutualExclusivityMessage(formStep, 'property_income');
+        } else if (hasOtherAllowanceValues()) {
+            // Make property income allowance field readonly
+            propertyIncomeInput.setAttribute('readonly', 'readonly');
+            propertyIncomeInput.style.opacity = '0.5';
+            propertyIncomeInput.style.cursor = 'not-allowed';
+            propertyIncomeInput.style.backgroundColor = '#e9ecef';
+
+            // Show info message
+            showMutualExclusivityMessage(formStep, 'other_allowances');
+        } else {
+            // Enable all fields
+            otherAllowanceInputs.forEach(input => {
+                input.removeAttribute('readonly');
+                input.style.opacity = '1';
+                input.style.cursor = '';
+                input.style.backgroundColor = '';
+            });
+
+            propertyIncomeInput.removeAttribute('readonly');
+            propertyIncomeInput.style.opacity = '1';
+            propertyIncomeInput.style.cursor = '';
+            propertyIncomeInput.style.backgroundColor = '';
+
+            // Enable SBA/ESBA add buttons
+            const addButtons = formStep.querySelectorAll('[id^="add-sba-"], [id^="add-esba-"]');
+            addButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = '';
+            });
+
+            // Hide info message
+            hideMutualExclusivityMessage(formStep);
+        }
+    }
+
+    // Function to show mutual exclusivity message
+    function showMutualExclusivityMessage(container, type) {
+        // Remove existing message if any
+        hideMutualExclusivityMessage(container);
+
+        const message = document.createElement('div');
+        message.className = 'alert alert-warning mutual-exclusivity-message mt-3';
+        message.innerHTML = `
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Mutual Exclusivity:</strong>
+            ${type === 'property_income'
+                ? 'Property Income Allowance cannot be used with other capital allowances. Other allowance fields are disabled.'
+                : 'Property Income Allowance cannot be used with other capital allowances. Property Income Allowance field is disabled.'}
+        `;
+
+        // Insert after the property income section or at the top of other allowances section
+        const targetSection = type === 'property_income'
+            ? container.querySelector('#property-income-section')
+            : container.querySelector('#other-allowances-section');
+
+        if (targetSection) {
+            targetSection.insertAdjacentElement('afterbegin', message);
+        }
+    }
+
+    // Function to hide mutual exclusivity message
+    function hideMutualExclusivityMessage(container) {
+        const existingMessage = container.querySelector('.mutual-exclusivity-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+    }
+
+    // Add event listeners to property income allowance input
+    propertyIncomeInput.addEventListener('input', updateFieldStates);
+    propertyIncomeInput.addEventListener('change', updateFieldStates);
+
+    // Add event listeners to all other allowance inputs
+    otherAllowanceInputs.forEach(input => {
+        input.addEventListener('input', updateFieldStates);
+        input.addEventListener('change', updateFieldStates);
+    });
+
+    // Watch for dynamically added SBA/ESBA cards and attach listeners
+    const sbaContainers = formStep.querySelectorAll('[id^="sba-container-"], [id^="esba-container-"]');
+    sbaContainers.forEach(container => {
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length) {
+                    // Add listeners to newly added building allowance inputs
+                    const newInputs = container.querySelectorAll('input[type="number"]');
+                    newInputs.forEach(input => {
+                        input.addEventListener('input', updateFieldStates);
+                        input.addEventListener('change', updateFieldStates);
+                    });
+                    updateFieldStates();
+                }
+            });
+        });
+
+        observer.observe(container, { childList: true, subtree: true });
+    });
+
+    // Initial state check
+    updateFieldStates();
+}
+</script>
+@endpush

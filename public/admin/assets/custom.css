@@ -1,0 +1,1349 @@
+                               
+                               /* Sticky table wrapper with dynamic height */
+                                .table-sticky-wrapper {
+                                    max-height: calc(100vh - 270px); /* Adjust 280px based on your header/footer height */
+                                    overflow: auto;
+                                    border: 1px solid #dee2e6;
+                                }
+                                
+                                .table-sticky-wrapper table {
+                                    margin-bottom: 0;
+                                }
+                                
+                                .table-sticky-wrapper thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    z-index: 10;
+                                    background-color: #cfe2ff !important;
+                                    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+                                }
+                                
+                                /* Always show scrollbar */
+                                .table-sticky-wrapper::-webkit-scrollbar {
+                                    width: 12px;
+                                    height: 12px;
+                                }
+                                
+                                .table-sticky-wrapper::-webkit-scrollbar-track {
+                                    background: #f1f1f1;
+                                }
+                                
+                                .table-sticky-wrapper::-webkit-scrollbar-thumb {
+                                    background: #888;
+                                    border-radius: 6px;
+                                }
+                                
+                                .table-sticky-wrapper::-webkit-scrollbar-thumb:hover {
+                                    background: #555;
+                                }
+                                
+                                /* Remove card-body padding for full height */
+                                .card-body.table-container {
+                                    padding: 0 !important;
+                                }
+                               
+                               /* Main container for all three tables */
+                               .tables-container {
+                                   display: flex;
+                                   gap: 0px;
+                                   margin-top: 20px;
+                                   flex-wrap: wrap;
+                                   /* Allow wrapping on smaller screens */
+                               }
+
+                               /* Each table container should have equal width */
+                               .table-container {
+                                   flex: 1;
+                                   min-width: 300px;
+                                   /* Minimum width to prevent tables from being too narrow */
+                                   display: flex;
+                                   flex-direction: column;
+                               }
+
+                               /* Table header styling */
+                               .table-header {
+                                   padding: 8px;
+                                   text-align: center;
+                                   border: 1px solid #000;
+                                   border-bottom: none;
+                                   color: #000 !important;
+                                   font-weight: bold;
+                                   margin: 0;
+                               }
+
+                               /* Different colored headers for each table */
+                               .details-header {
+                                   background-color: #dff3f9;
+                               }
+
+                               .office-account-header {
+                                   background-color: #ebebec;
+                                   border-left: none !important;
+                                   border-right: none !important;
+                               }
+
+                               .client-account-header {
+                                   background-color: #dddddd;
+                               }
+
+                               /* Table styling */
+                               .account-table {
+                                   border: 1px solid #dee2e6;
+                                   margin-bottom: 0;
+                                   width: 100%;
+                                   table-layout: fixed;
+                                   /* Ensures consistent column widths */
+                                   flex-grow: 1;
+                               }
+
+                               .custom-card .table-container .office-account-table thead.office-head th {
+                                   background: #ebebec !important;
+                                   text-align: center !important;
+                                   border-left: none !important;
+                                   border-right: none !important;
+
+                               }
+
+                               .account-table th,
+                               .account-table td {
+                                   border: 1px solid #d2d1d1 !important;
+                                   padding: 8px;
+                                   text-align: center;
+                                   font-size: 12px;
+                                   word-wrap: break-word;
+                               }
+
+                               .account-table th {
+                                   background-color: #f8f9fa;
+                                   font-weight: bold;
+                               }
+
+                               /* Specific table header colors - targeting actual HTML structure */
+                               .details-table th {
+                                   background-color: #dff3f9 !important;
+                               }
+
+                               /* Target the office account table (second table container) */
+                               .tables-container .table-container:nth-child(2) .account-table th {
+                                   background-color: #ebebec !important;
+                               }
+
+                               /* Target the client account table (third table container) */
+                               .tables-container .table-container:nth-child(3) .account-table th {
+                                   background-color: #dddddd !important;
+                               }
+
+                               /* Responsive design for smaller screens */
+                               @media (max-width: 1200px) {
+                                   .tables-container {
+                                       flex-direction: column;
+                                   }
+
+                                   .table-container {
+                                       min-width: auto;
+                                       margin-bottom: 20px;
+                                   }
+
+                                   .table-container:last-child {
+                                       margin-bottom: 0;
+                                   }
+                               }
+
+                               @media (max-width: 768px) {
+                                   .tables-container {
+                                       gap: 0px;
+                                   }
+
+                                   .account-table th,
+                                   .account-table td {
+                                       padding: 6px;
+                                       font-size: 11px;
+                                   }
+
+                                   .table-header {
+                                       padding: 6px;
+                                       font-size: 12px;
+                                   }
+                               }
+
+
+
+
+                               /* Apply to all custom datatables */
+                               /*table.custom-datatable {*/
+                               /*    border: 1px solid #ccc;*/
+                               /*}*/
+
+                               .teal-custom {
+                                   background-color: #13667d !important;
+                                   color: #fff !important;
+                                   /* optional: make text white on teal */
+                               }
+
+                               .teal-custom-btn {
+                                   background-color: #13667d !important;
+                                   color: #fff !important;
+                                   font-family: 'Helvetica', sans-serif !important;
+                                   font-weight: 700 !important;
+                                   font-size: 0.85rem;
+                                   border: none;
+                                   padding: 3px 6px;
+                                   border-radius: 0px;
+                               }
+                               
+                               .teal-custom-btn.active {
+                                   background-color: #0c4454 !important;
+                                   border-color: #0c4454 !important;
+                                   color: #ffffff !important;
+                                   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+                                   font-weight: 600 !important;
+                               }
+
+                               /* Press effect (only while clicking) */
+                               .teal-custom-btn:active {
+                                   transform: translateY(1px);
+                                   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+                               }
+
+                               /* Focus state */
+                               .teal-custom-btn:focus {
+                                   outline: none;
+                                   box-shadow: 0 0 0 3px rgba(19, 102, 125, 0.3);
+                               }
+
+                               /* Active button hover (slightly different effect) */
+                               .teal-custom-btn.active:hover {
+                                   background-color: #0a3a47 !important;
+                                   border-color: #0a3a47 !important;
+                               }
+
+                               .page-title {
+                                   font-family: 'Mona Sans', sans-serif;
+                                    font-weight: 100;
+                                   color: #1d687d !important;
+                                   font-size: 13px;
+                                   margin-bottom: 5px;
+                               }
+
+                               /* Utility classes for just the color */
+                               .text-teal {
+                                   color: #13667d !important;
+                               }
+
+                               .bg-teal {
+                                   background-color: #13667d !important;
+                               }
+
+                               .border-teal {
+                                   border-color: #13667d !important;
+                               }
+                               
+                              /* 🔹 Outlined version of teal button */
+                               .teal-outline-btn {
+                                   background-color: transparen;
+                                   color: #b5b5b5;
+                                   border: 1px solid #b5b5b5;
+                                   font-family: 'Helvetica', sans-serif !important;
+                                   font-weight: 500;
+                                   font-size: 0.9rem;
+                                   padding: 4px 5px;
+                                   transition: all 0.2s ease-in-out;
+                               }
+
+                               /* Hover effect */
+                               .teal-outline-btn:hover {
+                                   background-color: #13667d;
+                                   color: #fff;
+                                   transform: translateY(-1px);
+                               }
+
+                               /* Active (selected) state */
+                               .teal-outline-btn.active {
+                                   background-color: #fff;
+                                   color: #13667d;
+                                   border: 1px solid #13667d;
+                                   font-weight: 600;
+                               }
+
+                               /* Hover effect when active */
+                               .teal-outline-btn.active:hover {
+                                   background-color: #13667d;
+                                   color: #fff;
+                                   border: 1px solid #13667d;
+                                   transform: translateY(1px);
+                                   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+                               }
+
+                               /* Focus ring */
+                               .teal-outline-btn:focus {
+                                   outline: none;
+                                   box-shadow: 0 0 0 2px rgba(19, 102, 125, 0.3);
+                               }
+
+
+
+                               /* Simple underlined button styles */
+                               .btn-simple {
+                                   background: none !important;
+                                   border: none !important;
+                                   color: #6c757d !important;
+                                   padding: 0px !important;
+                                   margin-right: 15px !important;
+                                   position: relative !important;
+                                   text-decoration: none !important;
+                                   background-color: transparent !important;
+                                   cursor: pointer !important;
+                               }
+
+                               .btn-simple.active {
+                                   color: #01677d !important;
+                               }
+
+                               .btn-simple.active::after {
+                                   content: '';
+                                   position: absolute;
+                                   bottom: -2px;
+                                   left: 0;
+                                   right: 0;
+                                   height: 2px;
+                                   background-color: #01677d;
+                               }
+
+                               /* .btn-simple:hover {
+                                   color: #7ed2e7 !important;
+                                   background: #fff !important;
+                               } */
+
+                               .nav-link-btn {
+                                   /* text-decoration: none; */
+                                   color: #666;
+                                   font-weight: 500;
+                                   padding: 0px;
+                                   border-radius: none;
+                                   transition: all 0.3s ease;
+                               }
+
+                               .nav-link-btn:hover {
+                                   color: #13667d;
+                                   background-color: #f8f9fa;
+                                   text-decoration: none;
+                               }
+
+                               .nav-link-btn.active {
+                                   color: #13667d;
+                                   background-color: transparent;
+                                   border-bottom: 1px solid;
+                                   font-weight: 600;
+                               }
+
+                               table.custom-datatable thead {
+                                   background-color: #f2f2f2;
+                                   color: #333;
+                               }
+
+                               /* Hide bottom border of thead */
+
+                               table.custom-datatable thead th,
+                               table.custom-datatable thead td {
+                                   border-bottom: none !important;
+                               }
+
+                               /* Hide top border of tfoot */
+
+                               table.custom-datatable tfoot th,
+                               table.custom-datatable tfoot td {
+                                   border-top: none !important;
+                               }
+
+                               table.custom-datatable td {
+                                   border: 1px solid rgb(238 238 238 / 20%) !important;
+                                   padding: 3px 10px !important;
+                               }
+
+                               table.custom-datatable th {
+                                   font-weight: bold;
+                               }
+
+                               table.custom-datatable th {
+                                   /*background-color: #e6e6e6;*/
+                                   background-color: #bbddf2;
+                                   color: #343a40;
+                               }
+
+                               table.custom-datatable tbody tr {
+                                   margin-bottom: 5px;
+                                   border-bottom: 0.2px solid #000;
+                               }
+
+                               /* Manual striping using nth-child */
+
+                               table.custom-datatable tbody tr:nth-child(odd) {
+                                   background-color: #eff2ff !important;
+                               }
+
+                               table.custom-datatable tbody tr:nth-child(even) {
+                                   background-color: #ffffff !important;
+                               }
+
+                               table.dataTable tfoot th,
+                               table.dataTable tfoot td {
+                                   padding: 0px;
+                                   border-top: 1px solid #000 !important;
+
+                               }
+
+
+
+                               table.dataTable thead .sorting::before,
+                               table.dataTable thead .sorting::after,
+                               table.dataTable thead .sorting_asc::before,
+                               table.dataTable thead .sorting_asc::after,
+                               table.dataTable thead .sorting_desc::before,
+                               table.dataTable thead .sorting_desc::after {
+                                   display: none !important;
+                               }
+
+
+                               /* Icon background styling for search and dropdown icons */
+                               /* Search icon background (for Ledger Ref) */
+
+                               #postCodeTypeIcon,
+                               #matterIcon,
+                               #nameIcon,
+                               #ledgerRefIcon,
+                               #referenceIcon,
+                               #addressIcon {
+                                   background-color: #1d687d;
+                                   color: white;
+                                   padding: 5px 5px;
+                                   /* border-radius: 4px;
+                                   margin-right: 8px; */
+                                   font-size: 10px;
+                                   display: inline-block;
+                                   vertical-align: middle;
+                                   transition: all 0.2s ease;
+                               }
+
+                               #postCodeTypeIcon:hover,
+                               #ledgerRefIcon:hover,
+                               #matterIcon:hover,
+                               #nameIcon:hover,
+                               #referenceIcon:hover,
+                               #addressIcon:hover {
+                                   background-color: #1d687d;
+                                   transform: scale(1.05);
+                               }
+
+                               /* Dropdown icons background */
+
+                               #bankAccountIcon,
+                               #paidInOutIcon,
+                               #accountRefIcon,
+                               #postCodeIcon,
+                               #statusIcon,
+                               #paymentTypeIcon,
+                               #feeEarnerIcon {
+                                   background-color: #1d687d;
+                                   color: white;
+                                   padding: 5px 7px;
+                                 
+                                   font-size: 12px;
+                                   display: inline-block;
+                                   transition: all 0.2s ease;
+                               }
+
+                               /* Header text alignment */
+
+                               .datatable-header-with-icon {
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: flex-start;
+                               }
+
+                               /* Responsive header styling */
+
+                               @media (max-width: 768px) {
+
+                                   #ledgerRefIcon,
+                                   #bankAccountIcon,
+                                   #paidInOutIcon,
+                                   #accountRefIcon,
+                                   #paymentTypeIcon {
+                                       padding: 4px 6px;
+                                       font-size: 10px;
+                                       margin-right: 5px;
+                                   }
+                               }
+
+                               /* Alternative styling - rounded circular background */
+
+                               .icon-circular {
+                                   background-color: #1d687d;
+                                   color: white;
+                                   padding: 5px;
+                                   border-radius: 50%;
+                                   width: 32px;
+                                   /* height: 32px; */
+                                   display: inline-flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   margin-left: 8px;
+                                   transition: all 0.2s ease;
+                               }
+
+                               .icon-circular:hover {
+                                   background-color: #325986;
+                                   transform: scale(1.1);
+                                   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+                               }
+
+                               /* Badge-style background */
+
+                               .icon-badge {
+                                   background-color: #28a745;
+                                   color: white;
+                                   padding: 4px 8px;
+                                   border-radius: 12px;
+                                   font-size: 0.75rem;
+                                   margin-left: 8px;
+                                   transition: all 0.2s ease;
+                               }
+
+                               .icon-badge:hover {
+                                   background-color: #1e7e34;
+                                   transform: translateY(-1px);
+                                   box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+                               }
+
+                               /* Gradient background option */
+
+                               .icon-gradient {
+                                   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                   color: white;
+                                   padding: 6px 10px;
+                                   border-radius: 6px;
+                                   margin-left: 8px;
+                                   transition: all 0.2s ease;
+                               }
+
+                               .icon-gradient:hover {
+                                   background: linear-gradient(135deg, #764ba2 0%, #325986 100%);
+                                   transform: scale(1.05);
+                                   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+                               }
+
+                               /* Existing pointer class enhancement */
+
+                               .pointer {
+                                   cursor: pointer;
+                                   transition: all 0.2s ease;
+                               }
+
+                               /* Make sure the icons maintain their clickable behavior */
+
+                               .pointer:hover {
+                                   color: inherit;
+                                   /* Override the original hover color since we're using background now */
+                               }
+
+
+                               /* charts of accounts side modal css  */
+
+                               .form-label-grey {
+                                   background-color: #2d98b1;
+                                   color: #fff;
+                                   padding: 3px 2px;
+                                   display: flex;
+                                   align-items: center;
+                                   height: 100%;
+                               }
+
+                               .custom-hover:hover,
+                               .custom-hover:focus {
+                                   background-color: transparent !important;
+                                   color: #01677d !important;
+                               }
+
+                               /* Base teal button class */
+                               .btn-teal {
+                                   background-color: #13667d !important;
+                                   color: #fff !important;
+                                   cursor: pointer;
+                                   transition: all 0.3s ease;
+                                   border: none;
+                               }
+
+                               .btn-teal:active,
+                               .btn-teal.active {
+                                   background-color: #72b3dc !important;
+                                   color: #fff !important;
+                               }
+
+                               .regular-office-form {
+                                   display: block;
+                               }
+
+                               .regular-office-form.hidden {
+                                   display: none;
+                               }
+
+                               .sales-invoice-form {
+                                   display: none;
+                                   padding-bottom: 2rem;
+                               }
+
+                               .sales-invoice-form.active {
+                                   display: block;
+                               }
+
+                               .invoice-table {
+                                   border: 1px solid #dee2e6;
+                                   /* border-radius: 8px; */
+                                   overflow: hidden;
+                                   margin-bottom: 20px;
+                                   background: white;
+                               }
+
+                               .invoice-table table {
+                                   margin-bottom: 0;
+                               }
+
+                               .invoice-table th {
+                                   background-color: #1d687d;
+                                   color: white;
+                                   font-weight: bold;
+                                   padding: 12px 8px;
+                                   text-align: center;
+                                   border: none;
+                                   font-size: 13px;
+                               }
+
+                               .invoice-table td {
+                                   padding: 8px;
+                                   border-bottom: 1px solid #dee2e6;
+                                   vertical-align: middle;
+                               }
+
+                               .invoice-table input,
+                               .invoice-table select {
+                                   border: 1px solid #ddd;
+                                   background: white;
+                                   width: 100%;
+                                   padding: 0px;
+                                   font-size: 13px;
+                                   border-radius: 0px;
+                               }
+
+                               .invoice-table input:focus,
+                               .invoice-table select:focus {
+                                   outline: 2px solid #72b3dc;
+                                   border-color: #72b3dc;
+                               }
+
+                               .invoice-table input[readonly] {
+                                   background-color: #f8f9fa;
+                                   color: #6c757d;
+                               }
+
+                               .invoice-table .table-actions {
+                                   background: #f8f9fa;
+                                   border-top: 1px solid #dee2e6;
+                                   padding: 15px;
+                                   display: flex;
+                                   gap: 10px;
+                               }
+
+                               .invoice-table .btn-sm {
+                                   padding: 6px 12px;
+                                   font-size: 12px;
+                               }
+
+                               .summary-section {
+                                   background: #f8f9fa;
+                                   border: 1px solid #dee2e6;
+                                   border-radius: 8px;
+                                   padding: 20px;
+                                   margin-bottom: 20px;
+                               }
+
+                               .summary-row {
+                                   display: flex;
+                                   justify-content: space-between;
+                                   margin-bottom: 10px;
+                                   font-size: 16px;
+                               }
+
+                               .summary-row.total {
+                                   border-top: 2px solid #000;
+                                   padding-top: 10px;
+                                   margin-top: 10px;
+                                   font-weight: bold;
+                                   font-size: 18px;
+
+                               }
+
+                               .table-row-selected {
+                                   background-color: #e3f2fd !important;
+                               }
+
+                               /* ===============================
+                                    UPDATED MODAL CSS - SMALLER & CENTERED
+                                    =============================== */
+
+                               .coa-modal {
+                                   display: none;
+                                   position: fixed;
+                                   inset: 0;
+                                   /* shorthand for top/left/right/bottom:0 */
+                                   z-index: 1055;
+                                   background-color: rgba(0, 0, 0, .6);
+                                   backdrop-filter: blur(3px);
+
+                                   /* centering (works only when display:flex) */
+                                   align-items: center;
+                                   justify-content: center;
+                               }
+
+                               /* NEW: row containing search (left) and Balance (right) */
+                               .coa-search-row {
+                                   display: flex;
+                                   align-items: center;
+                                   gap: 8px;
+                                   padding: 6px 8px;
+                                   background: #eef6ff;
+                                   /* subtle light blue band */
+                                   border-bottom: 1px solid #cfd6e2;
+                               }
+
+                               .coa-modal.show {
+                                   display: flex !important;
+                                   /* <- critical */
+                                   align-items: center !important;
+                                   justify-content: center !important;
+                               }
+
+                               .modal-open {
+                                   overflow: hidden;
+                               }
+
+                               .coa-modal-content {
+                                   position: relative !important;
+                                   background: white;
+                                   width: 700px !important;
+                                   max-width: 90vw !important;
+                                   height: 550px !important;
+                                   max-height: 85vh !important;
+                                   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+                                   display: flex;
+                                   flex-direction: column;
+                                   overflow: hidden;
+                                   animation: modalSlideIn 0.3s ease-out;
+                                   /* Remove any transform positioning */
+                                   transform: none !important;
+                               }
+
+                               @keyframes modalSlideIn {
+                                   from {
+                                       opacity: 0;
+                                       transform: scale(0.95) translateY(-10px);
+                                   }
+
+                                   to {
+                                       opacity: 1;
+                                       transform: scale(1) translateY(0);
+                                   }
+                               }
+
+                               .coa-modal-header {
+                                   background: linear-gradient(135deg, #1d687d 0%, #2c6fa4 100%);
+                                   color: white;
+                                   padding: 14px 20px;
+                                   display: flex;
+                                   justify-content: space-between;
+                                   align-items: center;
+                               }
+
+                               .coa-modal-title {
+                                   font-size: 16px;
+                                   font-weight: 600;
+                                   margin: 0;
+                                   display: flex;
+                                   align-items: center;
+                               }
+
+                               .coa-modal-title i {
+                                   margin-right: 8px;
+                                   font-size: 18px;
+                               }
+
+                               .coa-modal-close {
+                                   background: none;
+                                   border: none;
+                                   color: white;
+                                   font-size: 20px;
+                                   cursor: pointer;
+                                   padding: 4px;
+                                   width: 28px;
+                                   height: 28px;
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   border-radius: 6px;
+                                   transition: background-color 0.2s;
+                               }
+
+                               .coa-modal-close:hover {
+                                   background-color: rgba(255, 255, 255, 0.2);
+                               }
+
+                               .coa-search-container {
+                                   padding: 8px 12px;
+                                   border-bottom: 1px solid #eee;
+                                   background: #f8f9fa;
+                               }
+
+                               .coa-search-wrapper {
+                                   position: relative;
+                                   display: flex;
+                                   align-items: center;
+                                   flex: 1;
+                               }
+
+                               .coa-search-icon {
+                                   position: absolute;
+                                   left: 8px;
+                                   color: #6c757d;
+                                   font-size: 12px;
+                                   /* z-index: 1; */
+                               }
+
+                               /* “Balance” pill/box at the end (matches your screenshot) */
+                               .coa-balance-label {
+                                   min-width: 120px;
+                                   /* adjust to your column width */
+                                   text-align: center;
+                                   font-weight: 700;
+                                   color: #2b2b2b;
+                                   background: #d6eaf8;
+                                   /* light cyan/blue */
+                                   border: 1px solid #bcd6ea;
+                                   border-radius: 4px;
+                                   padding: 6px 10px;
+                               }
+
+                               /* Optional: stack on small screens */
+                               @media (max-width: 520px) {
+                                   .coa-search-row {
+                                       flex-wrap: wrap;
+                                   }
+
+                                   .coa-balance-label {
+                                       width: 100%;
+                                   }
+                               }
+
+                               .coa-search-box {
+                                   width: 100%;
+                                   padding: 6px 8px 6px 28px;
+                                   border: 1px solid #ddd;
+                                   border-radius: 6px;
+                                   font-size: 12px;
+                                   outline: none;
+                                   transition: border-color 0.2s;
+                                   background: white;
+                               }
+
+                               .coa-search-box:focus {
+                                   border-color: #1d687d;
+                                   box-shadow: 0 0 0 0.1rem rgba(27, 89, 140, 0.25);
+                               }
+
+                               .coa-modal-body {
+                                   flex: 1;
+                                   display: grid;
+                                   grid-template-columns: 1fr 1fr;
+                                   overflow: hidden;
+                                   min-height: 350px;
+                               }
+
+                               .coa-column {
+                                   border-right: 1px solid #eee;
+                                   display: flex;
+                                   flex-direction: column;
+                                   overflow: hidden;
+                               }
+
+                               .coa-column:last-child {
+                                   border-right: none;
+                               }
+
+                               .coa-column-header {
+                                   background: #f8f9fa;
+                                   color: #1d687d;
+                                   padding: 10px 15px;
+                                   font-weight: 600;
+                                   font-size: 13px;
+                                   text-align: center;
+                                   display: flex;
+                                   justify-content: space-between;
+                                   align-items: center;
+                                   border-bottom: 1px solid #eee;
+                               }
+
+                               .coa-column-body {
+                                   flex: 1;
+                                   overflow-y: auto;
+                                   padding: 0;
+                               }
+
+                               .coa-item {
+                                   padding: 10px 15px;
+                                   cursor: pointer;
+                                   border-bottom: 1px solid #f0f0f0;
+                                   display: flex;
+                                   justify-content: space-between;
+                                   align-items: center;
+                                   transition: all 0.2s ease;
+                                   font-size: 13px;
+                               }
+
+                               .coa-item:hover {
+                                   background: #e3f2fd;
+                                   color: #1976d2;
+                               }
+
+                               .coa-item.selected {
+                                   background: #1d687d;
+                                   color: white;
+                               }
+
+                               .coa-item-text {
+                                   font-weight: 500;
+                               }
+
+                               .coa-item-main {
+                                   flex: 1;
+                                   min-width: 0;
+                               }
+
+                               .coa-balance {
+                                   font-weight: 600;
+                                   font-size: 11px;
+                                   padding: 3px 6px;
+                                   background: rgba(0, 0, 0, 0.1);
+                                   border-radius: 8px;
+                                   min-width: 50px;
+                                   text-align: center;
+                               }
+
+                               .coa-item.selected .coa-balance {
+                                   background: rgba(255, 255, 255, 0.2);
+                               }
+
+                               .coa-empty {
+                                   padding: 25px 15px;
+                                   text-align: center;
+                                   color: #999;
+                                   font-style: italic;
+                                   font-size: 12px;
+                               }
+
+                               .coa-total {
+                                   background: #f8f9fa;
+                                   border-top: 2px solid #1d687d;
+                                   font-weight: bold;
+                                   color: #1d687d;
+                               }
+
+                               .coa-modal-footer {
+                                   padding: 12px 20px;
+                                   border-top: 1px solid #eee;
+                                   background: #f8f9fa;
+                                   display: flex;
+                                   justify-content: space-between;
+                                   align-items: center;
+                                   border-radius: 0 0 12px 12px;
+                               }
+
+                               .coa-selected-display {
+                                   font-size: 12px;
+                                   color: #666;
+                               }
+
+                               .coa-selected-account {
+                                   font-weight: 600;
+                                   color: #1d687d;
+                               }
+
+                               .btn-select-account {
+                                   background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+                                   color: white;
+                                   border: none;
+                                   padding: 8px 16px;
+                                   border-radius: 6px;
+                                   cursor: pointer;
+                                   font-weight: 600;
+                                   font-size: 12px;
+                                   transition: all 0.2s;
+                                   box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+                               }
+
+                               .btn-select-account:hover:not(:disabled) {
+                                   background: linear-gradient(135deg, #218838 0%, #1c7a5c 100%);
+                                   transform: translateY(-1px);
+                                   box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+                               }
+
+                               .btn-select-account:disabled {
+                                   background: #6c757d;
+                                   cursor: not-allowed;
+                                   transform: none;
+                                   box-shadow: none;
+                               }
+
+                               .coa-trigger {
+                                   padding: 3px;
+                                   border: 1px solid #000;
+                                   border-radius: 1px;
+                                   background: white;
+                                   justify-content: space-between;
+                                   align-items: center;
+                                   display: flex;
+                                   width: 290px;
+                                   height: 25px;
+                                   transition: border-color 0.2s;
+                               }
+
+                               .coa-trigger:hover {
+                                   border-color: #72b3dc;
+                               }
+
+                               .coa-placeholder {
+                                   color: #0d0d0d;
+                               }
+
+                               .coa-selected-text {
+                                   color: #1d687d;
+                                   font-weight: bold;
+                               }
+
+                               /* Scrollbar styling for smaller modal */
+                               .coa-column-body::-webkit-scrollbar {
+                                   width: 4px;
+                               }
+
+                               .coa-column-body::-webkit-scrollbar-track {
+                                   background: #f1f1f1;
+                               }
+
+                               .coa-column-body::-webkit-scrollbar-thumb {
+                                   background: #c1c1c1;
+                                   border-radius: 2px;
+                               }
+
+                               .coa-column-body::-webkit-scrollbar-thumb:hover {
+                                   background: #a8a8a8;
+                               }
+
+                               /* Responsive adjustments for small modal */
+                               @media (max-width: 768px) {
+                                   .coa-modal-content {
+                                       width: 95vw !important;
+                                       height: 70vh !important;
+                                       max-height: 600px !important;
+                                   }
+
+                                   .coa-modal-body {
+                                       grid-template-columns: 1fr;
+                                       grid-template-rows: 1fr 1fr;
+                                   }
+
+                                   .coa-column {
+                                       border-right: none;
+                                       border-bottom: 1px solid #eee;
+                                   }
+
+                                   .coa-column:last-child {
+                                       border-bottom: none;
+                                   }
+                               }
+
+                               @media (max-width: 480px) {
+                                   .coa-modal-content {
+                                       width: 98vw !important;
+                                       height: 80vh !important;
+                                   }
+
+                                   .coa-modal-footer {
+                                       flex-direction: column;
+                                       gap: 8px;
+                                       align-items: stretch;
+                                   }
+
+                                   .btn-select-account {
+                                       width: 100%;
+                                   }
+                               }
+
+                               /* charts of accounts side modal css end */
+                               /* charts of accounts side modal css end */
+
+                               /* charts of accounts side table  css start */
+
+                               .custom-card .table {
+                                   width: 100% !important;
+                                   border-collapse: collapse !important;
+                                   font-size: 13px !important;
+                               }
+
+                               /* .custom-card .table thead th {
+                                   padding: 5px !important;
+                                   text-align: center !important;
+                                   font-weight: bold !important;
+                                   border: 1px solid #333 !important;
+                                   background-color: #dff3f9 !important;
+                                   color: #52534d !important;
+                               } */
+
+                               .custom-card .table thead th {
+                                   padding: 0px !important;
+                                   /* text-align: left !important; */
+                                   font-weight: bold !important;
+                                   border: 0.2px solid #E2E6F1  !important;
+                                   background-color: #dff3f9 !important;
+                                   color: #52534d !important;
+                               }
+
+                               .custom-card .table thead th.filter-active {
+                                   padding: 4px 3px !important;
+                               }
+
+                               .custom-card .table thead th.filter-active {
+                                   padding: 4px 3px !important;
+                               }
+
+                               .custom-card .table tbody tr:nth-child(odd) {
+                                   background-color: white !important;
+                               }
+
+                               .custom-card .table tbody tr:nth-child(even) {
+                                   background-color: #f0f4f8 !important;
+                               }
+
+                               .custom-card .table tbody td {
+                                   text-align: center;
+                                   padding: 2px 8px !important;
+                                   border: 0.2px solid #E2E6F1  !important;
+                                   color: #333 !important;
+                               }
+
+                               #transaction-panel .table thead th {
+                                   padding: 0px !important;
+                                   text-align: center !important;
+                                   font-weight: bold !important;
+                                   /* background-color: #1d687d !important; */
+                                   color: #52534d !important;
+                                   border: none;
+                               }
+
+                               #transaction-panel .table tbody td {
+                                   padding: 2px !important;
+                                   text-align: center !important;
+                                   border: 0.2px solid #0b0b0b !important;
+                               }
+
+                               input[type="checkbox"] {
+                                   width: 14px;
+                                   height: 14px;
+                               }
+
+                               .category-nav-btn:hover {
+                                   background-color: #1d687d !important;
+                                   color: white !important;
+                               }
+
+                               /* Ensure borders are visible on all table elements */
+                               .custom-card table,
+                               .custom-card table th,
+                               .custom-card table td {
+                                   border-collapse: collapse !important;
+                               }
+
+                               /* Checkbox column */
+                               /* ========== TABLE BASE ========== */
+                               #transaction-table {
+                                   width: 100% !important;
+                                   table-layout: fixed !important;
+                                   /* required for colResize */
+                                   border-collapse: collapse;
+                               }
+
+                               #transaction-table th,
+                               #transaction-table td {
+                                   border: 0.2px solid #858080 !important;
+                                   padding: 6px 8px;
+                                   white-space: nowrap;
+                                   overflow: hidden;
+                                   text-overflow: ellipsis;
+                                   min-width: 80px;
+                                   /* ensures no column gets too tiny */
+                               }
+
+                               /* Zebra striping */
+                               #transaction-table tbody tr:nth-child(odd) {
+                                   background-color: #eff2ff !important;
+                               }
+
+                               #transaction-table tbody tr:nth-child(even) {
+                                   background-color: #ffffff !important;
+                               }
+
+                               /* ========== HEADER STYLE ========== */
+                               #transaction-table thead th {
+                                   background-color: #bbddf2;
+                                   font-weight: bold;
+                                   color: #343a40;
+                                   text-align: center;
+                                   vertical-align: middle;
+                                   position: relative;
+                                   padding-right: 30px;
+                                   /* leave space for filter icon */
+                               }
+
+                               /* Wrapper for header text */
+                               .datatable-header {
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   width: 100%;
+                               }
+
+                               /* Header title */
+                               .datatable-header span {
+                                   flex: 1;
+                                   text-align: center;
+                                   font-weight: 600;
+                               }
+
+                               /* ========== FILTER ICON ========== */
+                               .filter-icon {
+                                   position: absolute;
+                                   top: 0;
+                                   right: 0;
+                                   bottom: 0;
+                                   width: 33px;
+                                   background-color: #1d687d;
+                                   color: #fff;
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   cursor: pointer;
+                                   border-left: 1px solid #ddd;
+                               }
+
+                               .filter-icon:hover {
+                                   background-color: #1d687d;
+                               }
+
+                               /* Body rows consistent with header */
+                               table.custom-datatable td {
+                                   border: 1px solid #eee !important;
+                                   padding: 4px 8px !important;
+                               }
+
+                               /* Zebra striping */
+                               table.custom-datatable tbody tr:nth-child(odd) {
+                                   background-color: #eff2ff !important;
+                               }
+
+                               table.custom-datatable tbody tr:nth-child(even) {
+                                   background-color: #ffffff !important;
+                               }
+
+                               /* Table header cell */
+                               table.custom-datatable thead th {
+                                   background-color: #bbddf2;
+                                   /* light blue */
+                                   font-weight: bold;
+                                   color: #343a40;
+                                   border: 1px solid #ddd !important;
+                                   padding: 8px 30px 8px 8px;
+                                   /* leave space for the icon on the right */
+                                   position: relative;
+                                   /* required for absolute positioning */
+                                   text-align: center;
+                                   vertical-align: middle;
+                               }
+
+                               /* Title wrapper */
+                               .datatable-header {
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   width: 100%;
+                               }
+
+
+
+                               /* New style for filter icons inside table headers */
+                               .table-header-icon {
+                                   position: absolute;
+                                   top: 0;
+                                   right: 0;
+                                   bottom: 0;
+                                   width: 33px !important;
+                                   /* width of icon bar */
+                                   background-color: #1d687d;
+                                   /* dark blue like in your image */
+                                   color: #fff !important;
+                                   display: flex;
+                                   align-items: center;
+                                   justify-content: center;
+                                   cursor: pointer;
+                                   border-left: 1px solid #ddd;
+                               }
+
+                               /* Hover effect */
+                               .table-header-icon:hover {
+                                   background-color: #2a476c;
+                                   /* slightly darker on hover */
+                               }
+
+                               /* Keep text centered in header */
+                               .filter-wrapper span {
+                                   display: block;
+                                   text-align: center;
+                                   margin-right: 30px;
+                                   /* leave space so text doesn’t overlap icon */
+                               }
+
+                               /* Force columns to respect TH widths */
+                               #transaction-table {
+                                   table-layout: fixed !important;
+                                   width: 100% !important;
+                               }
+
+                               #transaction-table th,
+                               #transaction-table td {
+                                   overflow: hidden;
+                                   text-overflow: ellipsis;
+                                   white-space: nowrap;
+                               }
+
+                               /* datatable re order icon setting code start  */
+                               #transaction-table thead th.reorderable-column::before {
+                                   content: "⋮⋮" !important;
+                                   position: absolute !important;
+                                   left: 80% !important;
+                                   top: 50% !important;
+                                   transform: translateY(-50%) !important;
+                                   color: teal !important;
+                                   font-weight: bold !important;
+                                   font-size: 12px !important;
+                                   opacity: 1 !important;
+                                   transition: opacity 0.2s ease !important;
+                                   pointer-events: none !important;
+                                   z-index: 999 !important;
+                               }
+
+                               /* datatable re order icon setting code end  */

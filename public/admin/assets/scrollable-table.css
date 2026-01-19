@@ -1,0 +1,90 @@
+/* ===========================
+   REUSABLE SCROLLABLE TABLE
+   =========================== */
+
+/* Table Wrapper - Fixed height container */
+.table-sticky-wrapper {
+    position: relative;
+    max-height: calc(100vh - 280px);
+    border: 1px solid #dee2e6;
+    background: #fff;
+    overflow: hidden;
+}
+
+/* Wrapper for scrollable content */
+.table-sticky-wrapper > div {
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* Table Base Styles */
+.table-sticky-wrapper table {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: 12px;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+/* Fixed Header - Sticky positioning */
+.table-sticky-wrapper table thead {
+    position: sticky;
+    top: 0;
+    background: #fff;
+}
+
+.table-sticky-wrapper table thead tr {
+    display: table-row;
+}
+
+/* Body - normal table display */
+.table-sticky-wrapper table tbody {
+    display: table-row-group; /* Changed: Keep it as normal table */
+}
+
+.table-sticky-wrapper table tbody tr {
+    display: table-row; /* Changed: Normal table row */
+}
+
+/* Force equal column distribution */
+.table-sticky-wrapper table th,
+.table-sticky-wrapper table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 8px;
+}
+
+/* Custom Scrollbar Styling */
+.table-sticky-wrapper > div::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-sticky-wrapper > div::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-sticky-wrapper > div::-webkit-scrollbar-thumb {
+    background: #c0c1c2;
+    border-radius: 4px;
+}
+
+.table-sticky-wrapper > div::-webkit-scrollbar-thumb:hover {
+    background: #a8a9aa;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-sticky-wrapper > div {
+        max-height: calc(100vh - 350px);
+    }
+    
+    .table-sticky-wrapper table thead th,
+    .table-sticky-wrapper table tbody td {
+        font-size: 10px;
+        padding: 4px;
+    }
+}

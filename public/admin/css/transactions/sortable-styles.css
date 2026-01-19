@@ -1,0 +1,39 @@
+/* ========================================
+   SORTABLE DRAG & DROP STYLES
+   ======================================== */
+
+.sortable-ghost {
+    opacity: 0.4 !important;
+    background-color: #f8f9fa !important;
+}
+
+.sortable-chosen {
+    background-color: #e3f2fd !important;
+}
+
+.sortable-drag {
+    background-color: #ffffff !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+    transform: rotate(2deg) !important;
+}
+
+.drag-handle {
+    cursor: grab !important;
+    color: #6c757d !important;
+    transition: color 0.2s;
+}
+
+.drag-handle:hover {
+    color: #007bff !important;
+}
+
+.drag-handle:active {
+    cursor: grabbing !important;
+}
+
+.sortable-chosen * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

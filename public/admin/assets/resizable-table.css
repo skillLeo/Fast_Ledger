@@ -1,0 +1,110 @@
+.resizable-draggable-table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: max-content;
+    user-select: none;
+}
+
+.resizable-draggable-table th,
+.resizable-draggable-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    text-align: left;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resizable-draggable-table th {
+    border: 1px solid #0c0c0c;
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    cursor: grab;
+}
+
+.resizable-draggable-table th:active {
+    cursor: grabbing;
+}
+
+
+.resizable-draggable-table th.drag-over-left {
+    border-left: 3px solid #0078d4;
+}
+
+.resizable-draggable-table th.drag-over-right {
+    border-right: 3px solid #0078d4;
+}
+
+.drag-ghost {
+    position: fixed;
+    background: #fff;
+    border: 2px solid #838080;
+    padding: 8px 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+ 
+    font-weight: 600;
+}
+
+.resizable-draggable-table td {
+    background: white;
+}
+
+.resize-handle {
+    position: absolute;
+    top: 0;
+    right: -3px;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 2;
+}
+
+.resize-handle:hover {
+    background: #0078d4;
+}
+
+
+
+.resizable-draggable-table th.resizing {
+    background: #e8f4fd;
+}
+
+.resizable-draggable-table tr:hover td {
+    background: #f8f9fa;
+}
+
+/* ✅ Ensure table renders properly before JS kicks in */
+.resizable-draggable-table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: max-content;
+    user-select: none;
+    visibility: visible; /* ✅ Add this */
+}
+
+/* ✅ Ensure columns have minimum space */
+.resizable-draggable-table th,
+.resizable-draggable-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    text-align: left;
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 80px; /* ✅ Add minimum width */
+}
+
+/* ✅ Rest of your CSS remains the same */
+.resizable-draggable-table th {
+    border: 1px solid #0c0c0c;
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    cursor: grab;
+}
+
+/* ... rest of your existing CSS ... */

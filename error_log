@@ -1,0 +1,156 @@
+[12-Apr-2025 21:31:50 UTC] PHP Warning:  require(/home/fastulpi/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 21:31:50 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/fastulpi/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/fastulpi/public_html/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 21:32:04 UTC] PHP Warning:  require(/home/fastulpi/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 21:32:04 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/fastulpi/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/fastulpi/public_html/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 21:32:05 UTC] PHP Warning:  require(/home/fastulpi/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 21:32:05 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/fastulpi/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/fastulpi/public_html/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 21:32:16 UTC] PHP Warning:  require(/home/fastulpi/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 21:32:16 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/fastulpi/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/fastulpi/public_html/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 22:01:23 UTC] PHP Warning:  require(/home/fastulpi/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 22:01:23 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/fastulpi/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php81/usr/share/pear:/opt/alt/php81/usr/share/php:/usr/share/pear:/usr/share/php') in /home/fastulpi/public_html/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/index.php on line 13
+[12-Apr-2025 22:07:52 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 8.1.32. in /home/fastulpi/public_html/vendor/composer/platform_check.php on line 24
+[13-Apr-2025 11:58:27 UTC] PHP Warning:  require(/home/fastulpi/public_html/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/fastulpi/public_html/index.php on line 13
+[13-Apr-2025 11:58:27 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/fastulpi/public_html/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/fastulpi/public_html/index.php:13
+Stack trace:
+#0 {main}
+  thrown in /home/fastulpi/public_html/index.php on line 13
+[29-Apr-2025 21:54:42 UTC] PHP Fatal error:  Trait "App\Models\HasRoles" not found in /home/fastulpi/public_html/app/Models/User.php on line 9
+[29-Apr-2025 21:58:48 UTC] PHP Fatal error:  Trait "App\Models\HasRoles" not found in /home/fastulpi/public_html/app/Models/User.php on line 9
+[29-Apr-2025 21:58:49 UTC] PHP Fatal error:  Trait "App\Models\HasRoles" not found in /home/fastulpi/public_html/app/Models/User.php on line 9
+[03-Jun-2025 18:33:37 UTC] PHP Parse error:  Unclosed '{' in /home/fastulpi/public_html/adminer.php on line 179
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[03-Jun-2025 18:34:02 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Jun-2025 18:28:33 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[12-Jun-2025 19:35:11 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:47 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[31-Jul-2025 10:27:55 UTC] PHP Warning:  Undefined variable $Ah in /home/fastulpi/public_html/adminer.php on line 1787
+[09-Sep-2025 11:07:18 UTC] PHP Fatal error:  Cannot redeclare App\Http\Requests\TransactionRequest::validateInvoiceTotals() in /home/fastulpi/public_html/app/Http/Requests/TransactionRequest.php on line 298
+[09-Sep-2025 11:08:02 UTC] PHP Fatal error:  Cannot redeclare App\Http\Requests\TransactionRequest::validateInvoiceTotals() in /home/fastulpi/public_html/app/Http/Requests/TransactionRequest.php on line 298
+[24-Oct-2025 17:23:42 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\BulkTransactionController as BulkTransactionController because the name is already in use in /home/fastulpi/public_html/routes/web.php on line 5
+[24-Oct-2025 17:23:43 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\BulkTransactionController as BulkTransactionController because the name is already in use in /home/fastulpi/public_html/routes/web.php on line 5
