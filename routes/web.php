@@ -41,9 +41,28 @@ use App\Http\Controllers\Report\{
     OfficeBankReconciliationController,
     ClientLedgerBalanceReportController
 };
+use App\Http\Controllers\SubscriptionController;
 
-// Dashboard & Profile
-Route::middleware('auth')->group(function () {
+// ============================================
+// ✅ APPLY ONBOARDING MIDDLEWARE TO ALL ROUTES
+// ============================================
+Route::middleware(['auth'])->group(function () {
+ 
+
+    // ✅ Subscription Management Routes
+    Route::post('/subscription/toggle-renewal', [SubscriptionController::class, 'toggleRenewal'])
+        ->name('subscription.toggle-renewal');
+    
+    Route::post('/subscription/cancel', [SubscriptionController::class, 'cancel'])
+        ->name('subscription.cancel');
+    
+    Route::post('/subscription/reactivate', [SubscriptionController::class, 'reactivate'])
+        ->name('subscription.reactivate');
+
+
+    
+    
+    
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

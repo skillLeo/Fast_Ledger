@@ -8,21 +8,37 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    /**
+     * Define the application's command schedule.
+     */
     protected function schedule(Schedule $schedule): void
     {
-        // Check for trial endings every day at midnight
+        // ✅ Process trial endings daily at 2 AM
         $schedule->command('trial:process-endings')
-            ->daily()
-            ->at('00:00')
-            ->timezone('Europe/London');
+            ->dailyAt('02:00')
+            ->withoutOverlapping()
+            ->onSuccess(function () {
+                \Log::info('Trial endings processed successfully');
+            })
+            ->onFailure(function () {
+                \Log::error('Trial endings processing failed');
+            });
 
-        // Also check every hour during business hours (optional)
-        $schedule->command('trial:process-endings')
-            ->hourly()
-            ->between('9:00', '18:00')
-            ->timezone('Europe/London');
+        // ✅ Process subscription renewals daily at 3 AM
+        $schedule->command('subscription:process-renewals')
+            ->dailyAt('03:00')
+            ->withoutOverlapping()
+            ->onSuccess(function () {
+                \Log::info('Subscription renewals processed successfully');
+            })
+            ->onFailure(function () {
+                \Log::error('Subscription renewals processing failed');
+            });
     }
 
+    /**
+     * Register the commands for the application.
+     */
     protected function commands(): void
     {
         $this->load(__DIR__.'/Commands');

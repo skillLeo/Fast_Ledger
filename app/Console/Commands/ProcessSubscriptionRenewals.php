@@ -1,5 +1,5 @@
 <?php
-// app/Console/Commands/ProcessTrialEndings.php
+// app/Console/Commands/ProcessSubscriptionRenewals.php
 
 namespace App\Console\Commands;
 
@@ -7,10 +7,10 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class ProcessTrialEndings extends Command
+class ProcessSubscriptionRenewals extends Command
 {
-    protected $signature = 'trial:process-endings {--force} {--dry-run}';
-    protected $description = 'Process trial endings - only charge if auto_renewal is ON';
+    protected $signature = 'subscription:process-renewals {--dry-run} {--force}';
+    protected $description = 'Process subscription renewals for users whose billing date is today';
 
     public function handle()
     {
@@ -20,59 +20,54 @@ class ProcessTrialEndings extends Command
             $this->warn('🧪 DRY RUN MODE - No actual charges will be made');
         }
 
-        $this->info('🔍 Checking for trials ending today...');
+        $this->info('🔍 Checking for subscriptions due for renewal...');
 
-        $usersToProcess = DB::table('user')
-            ->where('subscription_status', 'trial')
-            ->whereNotNull('trial_ends_at')
-            ->where('trial_ends_at', '<=', now())
+        // ✅ Check auto_renewal as integer (1 = enabled)
+        $usersDue = DB::table('user')
+            ->where('subscription_status', 'active')
+            ->where('auto_renewal', 1) // ✅ Use integer check
+            ->whereNotNull('next_billing_date')
+            ->where('next_billing_date', '<=', now())
+            ->whereNotNull('stripe_payment_method_id')
             ->get();
 
-        if ($usersToProcess->isEmpty()) {
-            $this->warn('⚠️  No trials found that need processing.');
-            $this->showUpcomingTrials();
+        if ($usersDue->isEmpty()) {
+            $this->warn('⚠️  No subscriptions found that need renewal.');
+            $this->showUpcomingRenewals();
             return 0;
         }
 
-        $this->info("✅ Found {$usersToProcess->count()} trial(s) to process\n");
+        $this->info("✅ Found {$usersDue->count()} subscription(s) to renew\n");
 
-        $chargedCount = 0;
-        $expiredCount = 0;
-        $failedCount = 0;
+        $successCount = 0;
+        $failCount = 0;
+        $skippedCount = 0;
 
-        foreach ($usersToProcess as $user) {
-            $result = $this->processUser($user, $isDryRun);
+        foreach ($usersDue as $user) {
+            $result = $this->processRenewal($user, $isDryRun);
             
-            if ($result === 'charged') $chargedCount++;
-            elseif ($result === 'expired') $expiredCount++;
-            else $failedCount++;
+            if ($result === 'success') $successCount++;
+            elseif ($result === 'failed') $failCount++;
+            else $skippedCount++;
         }
 
-        $this->displaySummary($chargedCount, $expiredCount, $failedCount, $isDryRun);
+        $this->displaySummary($successCount, $failCount, $skippedCount, $isDryRun);
         return 0;
     }
 
-    protected function processUser($user, bool $isDryRun): string
+    protected function processRenewal($user, bool $isDryRun): string
     {
         $this->info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         $this->info("👤 Processing: {$user->Full_Name} ({$user->email})");
-        
-        // ✅ CHECK AUTO-RENEWAL STATUS FIRST
-        $autoRenewal = $user->auto_renewal ?? 0;
-        $this->line("   🔄 Auto-Renewal: " . ($autoRenewal == 1 ? 'ENABLED ✅' : 'DISABLED ❌'));
 
-        if ($autoRenewal != 1) {
-            // ❌ AUTO-RENEWAL OFF - EXPIRE THE TRIAL
-            $this->warn("   ⚠️  Auto-renewal is OFF - Trial will EXPIRE without charging");
-            
-            if (!$isDryRun) {
-                $this->expireTrial($user);
-            }
-            
-            return 'expired';
+        // ✅ Check if auto-renewal is still enabled (as integer)
+        if ($user->auto_renewal != 1) {
+            $this->warn("   ⏭️  Auto-renewal disabled - skipping");
+            $this->disableSubscription($user, 'auto_renewal_disabled');
+            return 'skipped';
         }
 
-        // ✅ AUTO-RENEWAL ON - PROCEED WITH CHARGING
+        // Calculate charge amount
         $monthlyAmount = $user->allowed_companies * 10;
         $isYearly = $user->payment_frequency === 'yearly';
         $chargeAmount = $isYearly 
@@ -84,20 +79,16 @@ class ProcessTrialEndings extends Command
         $this->line("   💰 Amount to charge: £{$chargeAmount}");
 
         if (!$user->stripe_payment_method_id) {
-            $this->error("   ❌ No payment method saved - Expiring trial");
-            
-            if (!$isDryRun) {
-                $this->expireTrial($user);
-            }
-            
-            return 'expired';
+            $this->error("   ❌ No payment method - DISABLING SUBSCRIPTION");
+            $this->disableSubscription($user, 'no_payment_method');
+            return 'failed';
         }
 
         $this->line("   💳 Payment Method: {$user->stripe_payment_method_id}");
 
         if ($isDryRun) {
             $this->warn("   🧪 DRY RUN - Would charge £{$chargeAmount}");
-            return 'charged';
+            return 'success';
         }
 
         try {
@@ -124,11 +115,11 @@ class ProcessTrialEndings extends Command
                 'payment_method' => $user->stripe_payment_method_id,
                 'off_session' => true,
                 'confirm' => true,
-                'description' => "Post-trial subscription for {$user->allowed_companies} companies",
+                'description' => "Subscription renewal for {$user->allowed_companies} companies ({$user->payment_frequency})",
                 'metadata' => [
                     'user_id' => $user->User_ID,
                     'user_email' => $user->email,
-                    'payment_type' => 'trial_end',
+                    'payment_type' => 'renewal',
                     'companies' => $user->allowed_companies,
                     'frequency' => $user->payment_frequency,
                 ],
@@ -137,30 +128,25 @@ class ProcessTrialEndings extends Command
             if ($paymentIntent->status === 'succeeded') {
                 DB::beginTransaction();
 
-                // ✅ Update user to active subscription
                 DB::table('user')
                     ->where('User_ID', $user->User_ID)
                     ->update([
                         'subscription_status' => 'active',
-                        'subscription_starts_at' => $periodStart,
-                        'trial_ends_at' => null,
                         'last_payment_date' => now(),
                         'next_billing_date' => $periodEnd,
                         'current_period_start' => $periodStart,
                         'current_period_end' => $periodEnd,
-                        'auto_renewal' => 1, // Keep it enabled
                         'stripe_payment_intent_id' => $paymentIntent->id,
                         'Modified_On' => now(),
                     ]);
 
-                // ✅ Log payment
                 DB::table('subscription_payments')->insert([
                     'user_id' => $user->User_ID,
                     'stripe_payment_intent_id' => $paymentIntent->id,
                     'amount' => $chargeAmount,
                     'currency' => 'gbp',
                     'status' => 'succeeded',
-                    'payment_type' => 'trial_end',
+                    'payment_type' => 'renewal',
                     'payment_frequency' => $user->payment_frequency,
                     'companies_count' => $user->allowed_companies,
                     'period_start' => $periodStart,
@@ -176,12 +162,12 @@ class ProcessTrialEndings extends Command
                 $this->info("   📧 Payment Intent: {$paymentIntent->id}");
                 $this->info("   📅 Next billing: {$periodEnd->format('Y-m-d')}");
 
-                Log::info('Trial ended - Payment successful', [
+                Log::info('Subscription renewed', [
                     'user_id' => $user->User_ID,
                     'amount' => $chargeAmount,
                 ]);
 
-                return 'charged';
+                return 'success';
 
             } else {
                 throw new \Exception("Payment failed: {$paymentIntent->status}");
@@ -189,20 +175,57 @@ class ProcessTrialEndings extends Command
 
         } catch (\Stripe\Exception\CardException $e) {
             $this->error("   ❌ Card declined: {$e->getMessage()}");
-            $this->expireTrial($user);
+            $this->handlePaymentFailure($user, $chargeAmount, $periodStart, $periodEnd, $e->getMessage());
             return 'failed';
 
         } catch (\Exception $e) {
             $this->error("   ❌ Error: {$e->getMessage()}");
-            $this->expireTrial($user);
+            $this->handlePaymentFailure($user, $chargeAmount, $periodStart ?? now(), $periodEnd ?? now(), $e->getMessage());
             return 'failed';
         }
     }
 
-    /**
-     * ✅ NEW: Expire trial without charging
-     */
-    protected function expireTrial($user): void
+    protected function handlePaymentFailure($user, $amount, $periodStart, $periodEnd, $reason): void
+    {
+        DB::beginTransaction();
+
+        DB::table('subscription_payments')->insert([
+            'user_id' => $user->User_ID,
+            'amount' => $amount,
+            'currency' => 'gbp',
+            'status' => 'failed',
+            'payment_type' => 'renewal',
+            'payment_frequency' => $user->payment_frequency,
+            'companies_count' => $user->allowed_companies,
+            'period_start' => $periodStart,
+            'period_end' => $periodEnd,
+            'failure_reason' => $reason,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('user')
+            ->where('User_ID', $user->User_ID)
+            ->update([
+                'subscription_status' => 'payment_failed',
+                'auto_renewal' => 0, // ✅ Use integer
+                'payment_failure_reason' => $reason,
+                'payment_failed_at' => now(),
+                'Modified_On' => now(),
+            ]);
+
+            DB::table('company_module_users')
+            ->where('User_ID', $user->User_ID)
+            ->update([
+                'Is_Active' => 0,
+            ]);
+
+        DB::commit();
+
+        Log::error('Renewal failed', ['user_id' => $user->User_ID]);
+    }
+
+    protected function disableSubscription($user, $reason): void
     {
         DB::beginTransaction();
 
@@ -210,52 +233,49 @@ class ProcessTrialEndings extends Command
             ->where('User_ID', $user->User_ID)
             ->update([
                 'subscription_status' => 'expired',
-                'trial_ends_at' => now(),
-                'auto_renewal' => 0,
+                'auto_renewal' => 0, // ✅ Use integer
                 'Modified_On' => now(),
             ]);
 
-        // Deactivate companies
-        DB::table('company_module_users')
-        ->where('User_ID', $user->User_ID)
-        ->update([
-            'Is_Active' => 0,
-        ]);
+            DB::table('company_module_users')
+            ->where('User_ID', $user->User_ID)
+            ->update([
+                'Is_Active' => 0,
+            ]);
 
         DB::commit();
 
-        Log::info('Trial expired without charge', [
-            'user_id' => $user->User_ID,
-            'reason' => 'auto_renewal disabled',
-        ]);
+        Log::info('Subscription disabled', ['user_id' => $user->User_ID, 'reason' => $reason]);
     }
 
-    protected function showUpcomingTrials(): void
+    protected function showUpcomingRenewals(): void
     {
-        $upcomingTrials = DB::table('user')
-            ->where('subscription_status', 'trial')
-            ->whereNotNull('trial_ends_at')
-            ->where('trial_ends_at', '>', now())
-            ->orderBy('trial_ends_at')
-            ->get();
-        
-        if ($upcomingTrials->isNotEmpty()) {
-            $this->info("\n📅 Upcoming trial endings:");
+        $upcoming = DB::table('user')
+            ->where('subscription_status', 'active')
+            ->where('auto_renewal', 1) // ✅ Use integer
+            ->whereNotNull('next_billing_date')
+            ->where('next_billing_date', '>', now())
+            ->orderBy('next_billing_date')
+            ->limit(10)
+            ->get(['Full_Name', 'email', 'allowed_companies', 'next_billing_date']);
+
+        if ($upcoming->isNotEmpty()) {
+            $this->info("\n📅 Upcoming renewals:");
             $this->table(
-                ['User', 'Email', 'Auto-Renewal', 'Ends At'],
-                $upcomingTrials->map(function ($user) {
+                ['User', 'Email', 'Companies', 'Next Billing'],
+                $upcoming->map(function ($user) {
                     return [
                         $user->Full_Name,
                         $user->email,
-                        $user->auto_renewal == 1 ? '✅ ON' : '❌ OFF',
-                        $user->trial_ends_at,
+                        $user->allowed_companies,
+                        $user->next_billing_date,
                     ];
                 })
             );
         }
     }
 
-    protected function displaySummary(int $charged, int $expired, int $failed, bool $isDryRun): void
+    protected function displaySummary(int $success, int $fail, int $skipped, bool $isDryRun): void
     {
         $this->info("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         $this->info("📊 SUMMARY:");
@@ -264,9 +284,13 @@ class ProcessTrialEndings extends Command
             $this->warn("   🧪 DRY RUN");
         }
         
-        $this->info("   💳 Charged (auto-renewal ON): {$charged}");
-        $this->warn("   ⏸️  Expired (auto-renewal OFF): {$expired}");
-        $this->error("   ❌ Failed: {$failed}");
+        $this->info("   ✅ Successful: {$success}");
+        $this->error("   ❌ Failed: {$fail}");
+        
+        if ($skipped > 0) {
+            $this->warn("   ⏭️  Skipped: {$skipped}");
+        }
+        
         $this->info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
 }

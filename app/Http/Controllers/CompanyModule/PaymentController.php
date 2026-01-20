@@ -12,12 +12,299 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     protected $stripeService;
 
     public function __construct(StripePaymentService $stripeService)
     {
         $this->stripeService = $stripeService;
     }
+
+
+
+
+
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'payment_intent_id' => 'nullable|string',
+            'payment_method_id' => 'required|string',
+            'number_of_companies' => 'required|integer|min:1|max:50',
+            'payment_frequency' => 'required|in:monthly,yearly',
+            'is_trial' => 'required|boolean',
+        ]);
+
+        $user = auth()->user();
+        $isTrial = $request->is_trial;
+        $isUpgrade = $user->subscription_status && $user->allowed_companies;
+
+        if (!$isTrial && $request->payment_intent_id) {
+            $paymentResult = $this->stripeService->getPaymentIntent($request->payment_intent_id);
+
+            if (!$paymentResult['success'] || $paymentResult['status'] !== 'succeeded') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Payment verification failed',
+                ], 400);
+            }
+        }
+
+        if ($isTrial && $user->has_used_free_trial) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have already used your free trial',
+            ], 400);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $numberOfCompanies = $request->number_of_companies;
+            $pricePerCompany = 10;
+            $totalPrice = $numberOfCompanies * $pricePerCompany;
+            $isYearly = $request->payment_frequency === 'yearly';
+
+            // ✅ UPGRADE PATH
+            if ($isUpgrade) {
+                if ($numberOfCompanies <= $user->allowed_companies) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "You must select more than your current {$user->allowed_companies} companies",
+                    ], 400);
+                }
+
+                // Calculate next billing based on frequency
+                $nextBilling = $isYearly ? now()->addYear() : now()->addMonth();
+
+                DB::table('user')
+                    ->where('User_ID', $user->User_ID)
+                    ->update([
+                        'allowed_companies' => $numberOfCompanies,
+                        'subscription_price' => $totalPrice,
+                        'payment_frequency' => $request->payment_frequency,
+                        'next_billing_date' => $nextBilling,
+                        'stripe_payment_intent_id' => $request->payment_intent_id,
+                        'stripe_payment_method_id' => $request->payment_method_id,
+                        'Modified_On' => now(),
+                    ]);
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => "Subscription upgraded to {$numberOfCompanies} companies!",
+                    'redirect_url' => route('company.select'),
+                ]);
+            }
+
+            // ✅ NEW SUBSCRIPTION - FREE TRIAL
+            if ($isTrial) {
+                $trialStartsAt = now();
+                $trialEndsAt = now()->addDays(14);
+
+                DB::table('user')
+                    ->where('User_ID', $user->User_ID)
+                    ->update([
+                        'allowed_companies' => $numberOfCompanies,
+                        'subscription_price' => $totalPrice,
+                        'subscription_status' => 'trial',
+                        'trial_starts_at' => $trialStartsAt,
+                        'trial_ends_at' => $trialEndsAt,
+                        'payment_frequency' => $request->payment_frequency,
+                        'has_used_free_trial' => 1,
+                        'auto_renewal' => true, // ✅ Default to enabled
+                        'stripe_payment_intent_id' => null,
+                        'stripe_payment_method_id' => $request->payment_method_id,
+                        'Modified_On' => now(),
+                    ]);
+
+                $this->grantModuleAccess($user->User_ID);
+
+                DB::commit();
+
+                Log::info('✅ Free trial started', [
+                    'user_id' => $user->User_ID,
+                    'companies' => $numberOfCompanies,
+                    'trial_ends' => $trialEndsAt,
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => '14-day free trial started! Enjoy full access.',
+                    'redirect_url' => route('company.select'),
+                ]);
+            }
+
+            // ✅ NEW SUBSCRIPTION - PAID
+            $periodStart = now();
+            $periodEnd = $isYearly ? now()->addYear() : now()->addMonth();
+
+            DB::table('user')
+                ->where('User_ID', $user->User_ID)
+                ->update([
+                    'allowed_companies' => $numberOfCompanies,
+                    'subscription_price' => $totalPrice,
+                    'subscription_status' => 'active',
+                    'subscription_starts_at' => $periodStart,
+                    'last_payment_date' => now(),
+                    'next_billing_date' => $periodEnd,
+                    'current_period_start' => $periodStart,
+                    'current_period_end' => $periodEnd,
+                    'trial_starts_at' => null,
+                    'trial_ends_at' => null,
+                    'payment_frequency' => $request->payment_frequency,
+                    'has_used_free_trial' => 1,
+                    'auto_renewal' => true, // ✅ Default to enabled
+                    'stripe_payment_intent_id' => $request->payment_intent_id,
+                    'stripe_payment_method_id' => $request->payment_method_id,
+                    'Modified_On' => now(),
+                ]);
+
+            // ✅ Log payment
+            DB::table('subscription_payments')->insert([
+                'user_id' => $user->User_ID,
+                'stripe_payment_intent_id' => $request->payment_intent_id,
+                'amount' => $totalPrice,
+                'currency' => 'gbp',
+                'status' => 'succeeded',
+                'payment_type' => 'initial',
+                'payment_frequency' => $request->payment_frequency,
+                'companies_count' => $numberOfCompanies,
+                'period_start' => $periodStart,
+                'period_end' => $periodEnd,
+                'paid_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $this->grantModuleAccess($user->User_ID);
+
+            DB::commit();
+
+            Log::info('✅ Paid subscription activated', [
+                'user_id' => $user->User_ID,
+                'companies' => $numberOfCompanies,
+                'amount' => $totalPrice,
+                'next_billing' => $periodEnd,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Subscription activated! Welcome to FastLedger.',
+                'redirect_url' => route('company.select'),
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            Log::error('❌ Payment processing failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment processing failed: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    protected function grantModuleAccess($userId)
+    {
+        $companyModule = DB::table('modules')
+            ->where('Module_Name', 'company_module')
+            ->first();
+
+        if (!$companyModule) {
+            throw new \Exception('Company module not found');
+        }
+
+        $existingAccess = DB::table('user_module_access')
+            ->where('User_ID', $userId)
+            ->where('Module_ID', $companyModule->Module_ID)
+            ->first();
+
+        if ($existingAccess) {
+            DB::table('user_module_access')
+                ->where('User_ID', $userId)
+                ->where('Module_ID', $companyModule->Module_ID)
+                ->update([
+                    'Has_Access' => true,
+                    'Is_Active' => true,
+                    'updated_at' => now(),
+                ]);
+        } else {
+            DB::table('user_module_access')->insert([
+                'User_ID' => $userId,
+                'Module_ID' => $companyModule->Module_ID,
+                'Has_Access' => true,
+                'Is_Active' => true,
+                'Granted_By' => $userId,
+                'Granted_At' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function create()
     {
@@ -185,209 +472,78 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * ✅ Store subscription
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'payment_intent_id' => 'nullable|string',
-            'payment_method_id' => 'required|string',
-            'number_of_companies' => 'required|integer|min:1|max:50',
-            'payment_frequency' => 'required|in:monthly,yearly',
-            'is_trial' => 'required|boolean',
-        ]);
 
-        $user = auth()->user();
-        $isTrial = $request->is_trial;
-        $isUpgrade = $user->subscription_status && $user->allowed_companies;
 
-        if (!$isTrial && $request->payment_intent_id) {
-            $paymentResult = $this->stripeService->getPaymentIntent($request->payment_intent_id);
 
-            if (!$paymentResult['success'] || $paymentResult['status'] !== 'succeeded') {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Payment verification failed',
-                ], 400);
-            }
-        }
 
-        if ($isTrial && $user->has_used_free_trial) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You have already used your free trial',
-            ], 400);
-        }
 
-        try {
-            DB::beginTransaction();
 
-            $numberOfCompanies = $request->number_of_companies;
-            $pricePerCompany = 10;
-            $totalPrice = $numberOfCompanies * $pricePerCompany;
 
-            // ✅ UPGRADE PATH
-            if ($isUpgrade) {
-                if ($numberOfCompanies <= $user->allowed_companies) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "You must select more than your current {$user->allowed_companies} companies",
-                    ], 400);
-                }
 
-                DB::table('user')
-                    ->where('User_ID', $user->User_ID)
-                    ->update([
-                        'allowed_companies' => $numberOfCompanies,
-                        'subscription_price' => $totalPrice,
-                        'payment_frequency' => $request->payment_frequency,
-                        'stripe_payment_intent_id' => $request->payment_intent_id,
-                        'stripe_payment_method_id' => $request->payment_method_id,
-                        'Modified_On' => now(),
-                    ]);
 
-                DB::commit();
 
-                return response()->json([
-                    'success' => true,
-                    'message' => "Subscription upgraded to {$numberOfCompanies} companies!",
-                    'redirect_url' => route('company.select'),
-                ]);
-            }
 
-            // ✅ NEW SUBSCRIPTION - FREE TRIAL
-            if ($isTrial) {
-                $trialStartsAt = now();
-                $trialEndsAt = now()->addDays(14);
 
-                // Use DB::table to ensure save
-                DB::table('user')
-                    ->where('User_ID', $user->User_ID)
-                    ->update([
-                        'allowed_companies' => $numberOfCompanies,
-                        'subscription_price' => $totalPrice,
-                        'subscription_status' => 'trial',
-                        'trial_starts_at' => $trialStartsAt,
-                        'trial_ends_at' => $trialEndsAt,
-                        'payment_frequency' => $request->payment_frequency,
-                        'has_used_free_trial' => 1, // Use 1 not true
-                        'stripe_payment_intent_id' => null,
-                        'stripe_payment_method_id' => $request->payment_method_id,
-                        'Modified_On' => now(),
-                    ]);
 
-                // Verify save
-                $saved = DB::table('user')
-                    ->where('User_ID', $user->User_ID)
-                    ->first();
 
-                if ($saved->stripe_payment_method_id !== $request->payment_method_id) {
-                    throw new \Exception('Payment method not saved!');
-                }
 
-                $this->grantModuleAccess($user->User_ID);
 
-                DB::commit();
 
-                Log::info('✅ Free trial started', [
-                    'user_id' => $user->User_ID,
-                    'companies' => $numberOfCompanies,
-                    'trial_ends' => $trialEndsAt,
-                    'payment_method' => $request->payment_method_id,
-                    'verified_saved' => $saved->stripe_payment_method_id,
-                ]);
 
-                return response()->json([
-                    'success' => true,
-                    'message' => '14-day free trial started! Enjoy full access.',
-                    'redirect_url' => route('company.select'),
-                ]);
-            }
 
-            // ✅ NEW SUBSCRIPTION - PAID
-            DB::table('user')
-                ->where('User_ID', $user->User_ID)
-                ->update([
-                    'allowed_companies' => $numberOfCompanies,
-                    'subscription_price' => $totalPrice,
-                    'subscription_status' => 'active',
-                    'subscription_starts_at' => now(),
-                    'trial_starts_at' => null,
-                    'trial_ends_at' => null,
-                    'payment_frequency' => $request->payment_frequency,
-                    'has_used_free_trial' => 1,
-                    'stripe_payment_intent_id' => $request->payment_intent_id,
-                    'stripe_payment_method_id' => $request->payment_method_id,
-                    'Modified_On' => now(),
-                ]);
 
-            $this->grantModuleAccess($user->User_ID);
 
-            DB::commit();
 
-            Log::info('✅ Paid subscription activated', [
-                'user_id' => $user->User_ID,
-                'companies' => $numberOfCompanies,
-                'amount' => $totalPrice,
-            ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Subscription activated! Welcome to FastLedger.',
-                'redirect_url' => route('company.select'),
-            ]);
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            
-            Log::error('❌ Payment processing failed', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Payment processing failed: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
 
-    protected function grantModuleAccess($userId)
-    {
-        $companyModule = DB::table('modules')
-            ->where('Module_Name', 'company_module')
-            ->first();
 
-        if (!$companyModule) {
-            throw new \Exception('Company module not found');
-        }
 
-        $existingAccess = DB::table('user_module_access')
-            ->where('User_ID', $userId)
-            ->where('Module_ID', $companyModule->Module_ID)
-            ->first();
 
-        if ($existingAccess) {
-            DB::table('user_module_access')
-                ->where('User_ID', $userId)
-                ->where('Module_ID', $companyModule->Module_ID)
-                ->update([
-                    'Has_Access' => true,
-                    'Is_Active' => true,
-                    'updated_at' => now(),
-                ]);
-        } else {
-            DB::table('user_module_access')->insert([
-                'User_ID' => $userId,
-                'Module_ID' => $companyModule->Module_ID,
-                'Has_Access' => true,
-                'Is_Active' => true,
-                'Granted_By' => $userId,
-                'Granted_At' => now(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

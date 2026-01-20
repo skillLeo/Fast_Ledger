@@ -44,6 +44,176 @@
                 </div>
             @endif
 
+
+
+            {{-- Add this section to your dashboard BEFORE the statistics cards --}}
+
+{{-- Subscription Management Card --}}
+@php
+    // ✅ GET FRESH VALUE FROM DATABASE
+    $userFresh = DB::table('user')->where('User_ID', auth()->user()->User_ID)->first();
+    $autoRenewalValue = $userFresh->auto_renewal ?? 1;
+    $isChecked = ($autoRenewalValue == 1);
+@endphp
+
+<div class="row mb-4">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="ri-vip-crown-line me-2"></i>Subscription Management
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    
+                    {{-- Current Plan Info --}}
+                    <div class="col-xl-6">
+                        <h5 class="fw-semibold mb-3">Current Plan</h5>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="text-muted" style="min-width: 150px;">Companies:</span>
+                            <strong>{{ auth()->user()->allowed_companies }} / {{ auth()->user()->allowed_companies }}</strong>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="text-muted" style="min-width: 150px;">Billing:</span>
+                            <strong class="text-capitalize">{{ auth()->user()->payment_frequency }}</strong>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="text-muted" style="min-width: 150px;">Price:</span>
+                            <strong>£{{ auth()->user()->subscription_price }}/{{ auth()->user()->payment_frequency === 'yearly' ? 'year' : 'month' }}</strong>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="text-muted" style="min-width: 150px;">Status:</span>
+                            @if(auth()->user()->subscription_status === 'trial')
+                                <span class="badge bg-warning-transparent">
+                                    <i class="ri-time-line me-1"></i>Trial
+                                </span>
+                            @elseif(auth()->user()->subscription_status === 'active')
+                                <span class="badge bg-success-transparent">
+                                    <i class="ri-check-line me-1"></i>Active
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Auto-Renewal Toggle --}}
+                    <div class="col-xl-6">
+                        <div class="p-4 bg-light rounded-3">
+                            <h5 class="fw-semibold mb-3">
+                                <i class="ri-refresh-line me-2"></i>Auto-Renewal
+                            </h5>
+                            
+                            {{-- DEBUG INFO --}}
+                            <div class="alert alert-info alert-sm mb-3" style="font-size: 11px;">
+                                <strong>Debug:</strong> DB Value = {{ $autoRenewalValue }} | Checked = {{ $isChecked ? 'YES' : 'NO' }}
+                            </div>
+                            
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div>
+                                    <p class="mb-1 fw-semibold">Automatic Renewal</p>
+                                    <small class="text-muted">
+                                        @if($isChecked)
+                                            ✅ Enabled - Will renew automatically
+                                        @else
+                                            ❌ Disabled - Will expire
+                                        @endif
+                                    </small>
+                                </div>
+                                <div class="form-check form-switch form-switch-lg">
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           id="autoRenewalToggle"
+                                           data-db-value="{{ $autoRenewalValue }}"
+                                           {{ $isChecked ? 'checked' : '' }}>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-outline-primary btn-sm w-100 mb-2" 
+                                        onclick="window.location.href='{{ route('company.payment.create') }}'">
+                                    <i class="ri-add-line me-1"></i>Upgrade Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggle = document.getElementById('autoRenewalToggle');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    console.log('🔧 Toggle Loaded');
+    console.log('📊 Initial State:', toggle.checked);
+    console.log('📊 DB Value:', toggle.dataset.dbValue);
+
+    if (!csrfToken) {
+        console.error('❌ No CSRF token!');
+        alert('ERROR: CSRF token missing!');
+        return;
+    }
+
+    toggle.addEventListener('change', async function() {
+        const enabled = this.checked;
+        console.log('🔄 User clicked toggle. New state:', enabled);
+
+        // Show confirmation
+        if (!confirm(enabled ? 'Enable auto-renewal?' : 'Disable auto-renewal?')) {
+            console.log('❌ User cancelled');
+            this.checked = !enabled;
+            return;
+        }
+
+        // Disable toggle during request
+        toggle.disabled = true;
+
+        try {
+            console.log('📤 Sending request to /subscription/toggle-renewal');
+            console.log('📤 Data:', { enabled });
+
+            const response = await fetch('/subscription/toggle-renewal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ enabled })
+            });
+
+            console.log('📥 Response status:', response.status);
+
+            const data = await response.json();
+            console.log('📥 Response data:', data);
+
+            if (data.success) {
+                console.log('✅ SUCCESS! Verified value:', data.verified_value);
+                alert('Auto-renewal ' + (enabled ? 'enabled' : 'disabled') + ' successfully!');
+                
+                // Force reload to show updated state
+                window.location.reload();
+            } else {
+                console.error('❌ API returned success=false:', data);
+                alert('ERROR: ' + (data.message || 'Unknown error'));
+                this.checked = !enabled;
+            }
+
+        } catch (error) {
+            console.error('❌ Request failed:', error);
+            alert('ERROR: ' + error.message);
+            this.checked = !enabled;
+        } finally {
+            toggle.disabled = false;
+        }
+    });
+});
+</script>
+@endpush
             {{-- Statistics Cards --}}
             <div class="row">
                 <div class="col-xxl-4 col-lg-4 col-md-4">

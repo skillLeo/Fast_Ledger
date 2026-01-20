@@ -1,8 +1,8 @@
+
 {{-- resources/views/admin/layout/app.blade.php --}}
 <!DOCTYPE html>
 <html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="transparent"
     data-width="default" data-menu-styles="light" data-toggled="close">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com; frame-src 'self' https://js.stripe.com; connect-src 'self' https://api.stripe.com;">
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdnjs.cloudflare.com;
@@ -114,28 +114,43 @@
 </head>
 
 <body>
-    {{-- ✅ Determine User State --}}
+    {{-- ✅ NEW LOGIC: Determine if user has PAID subscription for current month --}}
     @php
         $user = auth()->user();
         $isCompanyUser = $user && in_array(4, $user->getRoleIds());
         $isCompanyRoute = request()->is('company*') || request()->routeIs('company.*') || request()->routeIs('modules.*');
         
-        // ✅ NEW LOGIC: Only hide sidebar if user has ZERO companies
+        // ✅ Check if user has ANY companies
         $hasAnyCompany = $user ? $user->companies()->exists() : false;
         
-        // ✅ Check specific onboarding routes
+        // ✅ NEW: Check if user has ACTIVE subscription (trial OR paid)
+        $hasActiveSubscription = false;
+        if ($user) {
+            $status = $user->subscription_status;
+            
+            // User has active subscription if:
+            // 1. Status is 'trial' AND trial hasn't ended yet
+            // 2. Status is 'active' AND next billing date is in the future
+            if ($status === 'trial' && $user->trial_ends_at && now()->lt($user->trial_ends_at)) {
+                $hasActiveSubscription = true;
+            } elseif ($status === 'active' && $user->next_billing_date && now()->lt($user->next_billing_date)) {
+                $hasActiveSubscription = true;
+            }
+        }
+        
+        // ✅ Check if on onboarding routes
         $isCompanySetupRoute = request()->routeIs('company.setup.*');
         $isPaymentRoute = request()->routeIs('company.payment.*');
         $isEmailVerificationRoute = request()->routeIs('verification.*');
         $isSubscriptionRoute = request()->routeIs('company.subscription.*');
         
-        // ✅ CRITICAL: Show onboarding layout ONLY if user has NO companies AND is in onboarding flow
-        $showOnboardingLayout = !$hasAnyCompany && (
-            $isCompanySetupRoute || 
-            $isPaymentRoute || 
-            $isEmailVerificationRoute ||
-            $isSubscriptionRoute
-        );
+        // ✅ CRITICAL: Show onboarding layout (no sidebar) if:
+        // - User has NO companies, OR
+        // - User has NO active subscription
+        // - AND is in onboarding flow
+        $isInOnboardingFlow = $isCompanySetupRoute || $isPaymentRoute || $isEmailVerificationRoute || $isSubscriptionRoute;
+        
+        $showOnboardingLayout = (!$hasAnyCompany || !$hasActiveSubscription) && $isInOnboardingFlow;
     @endphp
 
     {{-- Start Switcher (Hide during onboarding) --}}
@@ -149,11 +164,11 @@
         <img src="{{ asset('admin/assets/images/media/loader.svg') }}" alt="">
     </div>
 
-    {{-- ✅ CONDITIONAL LAYOUT BASED ON COMPANY EXISTENCE --}}
+    {{-- ✅ CONDITIONAL LAYOUT --}}
     @if ($showOnboardingLayout)
         {{-- ============================================ --}}
         {{-- ONBOARDING LAYOUT (No Sidebar/Header)       --}}
-        {{-- Only shown when user has ZERO companies     --}}
+        {{-- Shown when: NO companies OR NO subscription --}}
         {{-- ============================================ --}}
         <div class="onboarding-content">
             @yield('content')
@@ -161,7 +176,8 @@
     @else
         {{-- ============================================ --}}
         {{-- NORMAL LAYOUT (With Sidebar/Header)         --}}
-        {{-- Shown when user has AT LEAST 1 company      --}}
+        {{-- Shown when: Has companies AND has active    --}}
+        {{-- subscription (trial or paid)                --}}
         {{-- ============================================ --}}
         
         {{-- Desktop Sidebar (Hidden on Mobile) --}}
