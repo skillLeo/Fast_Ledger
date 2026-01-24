@@ -1,19 +1,16 @@
 <?php
+// app/Http/Middleware/CheckRole.php
 
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next, string $role): Response
     {   
         if (!Auth::check()) {
@@ -22,18 +19,32 @@ class CheckRole
         
         $roles = [
             'superadmin' => [1],
-            'admin' => [3],
-            'client' => [2],
-            'companyuser' => [4],
-            // 'company_user' => [5,6],
+            'admin' => [3], // Agent Admin
+            'client' => [2], // Entity Admin
+            'companyuser' => [4], // Invoicing App
         ];
 
-        $roleIDs = $roles[$role] ?? [];
+        $allowedRoleIds = $roles[$role] ?? [];
 
-        if(!in_array(auth()->user()->User_Role, $roleIDs)){
-            abort(code:403);
+        // ✅ Get user's roles from userrole table
+        $userRoleIds = DB::table('userrole')
+            ->where('User_ID', auth()->user()->User_ID)
+            ->pluck('Role_ID')
+            ->toArray();
+
+        // ✅ Check if user has any of the allowed roles
+        $hasAccess = false;
+        foreach ($allowedRoleIds as $roleId) {
+            if (in_array($roleId, $userRoleIds)) {
+                $hasAccess = true;
+                break;
+            }
         }
+
+        if (!$hasAccess) {
+            abort(403, 'Unauthorized access');
+        }
+
         return $next($request);
     }
-    
 }

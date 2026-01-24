@@ -1,7 +1,6 @@
 <?php
-// ============================================
-// COMPLETE PaymentController.php
-// ============================================
+// app/Http/Controllers/CompanyModule/PaymentController.php
+
 namespace App\Http\Controllers\CompanyModule;
 
 use App\Http\Controllers\Controller;
@@ -12,55 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
     protected $stripeService;
 
     public function __construct(StripePaymentService $stripeService)
     {
         $this->stripeService = $stripeService;
     }
-
-
-
-
-
 
     public function store(Request $request)
     {
@@ -75,6 +31,14 @@ class PaymentController extends Controller
         $user = auth()->user();
         $isTrial = $request->is_trial;
         $isUpgrade = $user->subscription_status && $user->allowed_companies;
+
+        // ✅ Get user's role
+        $roleIds = DB::table('userrole')
+            ->where('User_ID', $user->User_ID)
+            ->pluck('Role_ID')
+            ->toArray();
+        
+        $isAgentAdmin = in_array(3, $roleIds);
 
         if (!$isTrial && $request->payment_intent_id) {
             $paymentResult = $this->stripeService->getPaymentIntent($request->payment_intent_id);
@@ -111,7 +75,6 @@ class PaymentController extends Controller
                     ], 400);
                 }
 
-                // Calculate next billing based on frequency
                 $nextBilling = $isYearly ? now()->addYear() : now()->addMonth();
 
                 DB::table('user')
@@ -128,10 +91,15 @@ class PaymentController extends Controller
 
                 DB::commit();
 
+                // ✅ Redirect based on role
+                $redirectUrl = $isAgentAdmin 
+                    ? url('/clients') 
+                    : route('company.select');
+
                 return response()->json([
                     'success' => true,
                     'message' => "Subscription upgraded to {$numberOfCompanies} companies!",
-                    'redirect_url' => route('company.select'),
+                    'redirect_url' => $redirectUrl,
                 ]);
             }
 
@@ -150,7 +118,7 @@ class PaymentController extends Controller
                         'trial_ends_at' => $trialEndsAt,
                         'payment_frequency' => $request->payment_frequency,
                         'has_used_free_trial' => 1,
-                        'auto_renewal' => true, // ✅ Default to enabled
+                        'auto_renewal' => true,
                         'stripe_payment_intent_id' => null,
                         'stripe_payment_method_id' => $request->payment_method_id,
                         'Modified_On' => now(),
@@ -164,12 +132,18 @@ class PaymentController extends Controller
                     'user_id' => $user->User_ID,
                     'companies' => $numberOfCompanies,
                     'trial_ends' => $trialEndsAt,
+                    'is_agent_admin' => $isAgentAdmin,
                 ]);
+
+                // ✅ Redirect based on role
+                $redirectUrl = $isAgentAdmin 
+                    ? url('/clients') 
+                    : route('company.select');
 
                 return response()->json([
                     'success' => true,
                     'message' => '14-day free trial started! Enjoy full access.',
-                    'redirect_url' => route('company.select'),
+                    'redirect_url' => $redirectUrl,
                 ]);
             }
 
@@ -192,13 +166,12 @@ class PaymentController extends Controller
                     'trial_ends_at' => null,
                     'payment_frequency' => $request->payment_frequency,
                     'has_used_free_trial' => 1,
-                    'auto_renewal' => true, // ✅ Default to enabled
+                    'auto_renewal' => true,
                     'stripe_payment_intent_id' => $request->payment_intent_id,
                     'stripe_payment_method_id' => $request->payment_method_id,
                     'Modified_On' => now(),
                 ]);
 
-            // ✅ Log payment
             DB::table('subscription_payments')->insert([
                 'user_id' => $user->User_ID,
                 'stripe_payment_intent_id' => $request->payment_intent_id,
@@ -224,12 +197,18 @@ class PaymentController extends Controller
                 'companies' => $numberOfCompanies,
                 'amount' => $totalPrice,
                 'next_billing' => $periodEnd,
+                'is_agent_admin' => $isAgentAdmin,
             ]);
+
+            // ✅ Redirect based on role
+            $redirectUrl = $isAgentAdmin 
+                ? url('/clients') 
+                : route('company.select');
 
             return response()->json([
                 'success' => true,
                 'message' => 'Subscription activated! Welcome to FastLedger.',
-                'redirect_url' => route('company.select'),
+                'redirect_url' => $redirectUrl,
             ]);
 
         } catch (\Exception $e) {
@@ -285,41 +264,33 @@ class PaymentController extends Controller
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function create()
     {
         $user = auth()->user();
+        
+        // ✅ Check if Agent Admin
+        $roleIds = DB::table('userrole')
+            ->where('User_ID', $user->User_ID)
+            ->pluck('Role_ID')
+            ->toArray();
+        
+        $isAgentAdmin = in_array(3, $roleIds);
         $isUpgrade = $user->subscription_status && $user->allowed_companies;
 
         if ($user->hasCompletedSubscriptionSetup() && !$isUpgrade) {
-            return redirect()->route('company.select')
+            // Redirect based on role
+            $redirectRoute = $isAgentAdmin ? '/clients' : 'company.select';
+            return redirect($redirectRoute)
                 ->with('info', 'You have already completed your subscription.');
         }
 
-        $hasCompany = $user->companies()->exists();
-        if (!$hasCompany && !$isUpgrade) {
-            return redirect()->route('company.setup.create')
-                ->with('error', 'Please create your company first.');
+        // ✅ Agent Admin does NOT need company setup
+        if (!$isAgentAdmin) {
+            $hasCompany = $user->companies()->exists();
+            if (!$hasCompany && !$isUpgrade) {
+                return redirect()->route('company.setup.create')
+                    ->with('error', 'Please create your company first.');
+            }
         }
 
         $pricingConfig = \App\Http\Controllers\CompanyModule\CompanySetupController::getPricingConfig();
@@ -329,6 +300,7 @@ class PaymentController extends Controller
             'default_companies' => 1,
             'current_companies' => $user->allowed_companies ?? 0,
             'is_upgrade' => $isUpgrade,
+            'is_agent_admin' => $isAgentAdmin, // ✅ Pass to view
             'price_per_company' => $pricingConfig['price_per_company'],
             'currency' => $pricingConfig['currency'],
             'can_use_trial' => $canUseTrial,
@@ -340,9 +312,6 @@ class PaymentController extends Controller
         return view('company-module.payment.create', compact('pricing', 'stripeKey', 'isTestMode'));
     }
 
-    /**
-     * ✅ CRITICAL FIX: Save payment method using DB::table
-     */
     public function createPaymentIntent(Request $request)
     {
         $request->validate([
@@ -366,7 +335,6 @@ class PaymentController extends Controller
 
             \Stripe\Stripe::setApiKey($secretKey);
 
-            // ✅ STEP 1: Create Stripe customer if needed
             if (!$user->stripe_customer_id) {
                 $customer = \Stripe\Customer::create([
                     'email' => $user->email,
@@ -374,7 +342,6 @@ class PaymentController extends Controller
                     'metadata' => ['user_id' => $user->User_ID],
                 ]);
 
-                // Save using DB::table
                 DB::table('user')
                     ->where('User_ID', $user->User_ID)
                     ->update([
@@ -387,11 +354,9 @@ class PaymentController extends Controller
                     'customer_id' => $customer->id,
                 ]);
 
-                // Refresh user
                 $user = DB::table('user')->where('User_ID', $user->User_ID)->first();
             }
 
-            // ✅ STEP 2: Attach payment method
             $paymentMethod = \Stripe\PaymentMethod::retrieve($request->payment_method_id);
             $paymentMethod->attach(['customer' => $user->stripe_customer_id]);
 
@@ -400,7 +365,6 @@ class PaymentController extends Controller
                 ['invoice_settings' => ['default_payment_method' => $request->payment_method_id]]
             );
 
-            // ✅ CRITICAL: Save payment method using DB::table (NOT Eloquent)
             $updated = DB::table('user')
                 ->where('User_ID', $user->User_ID)
                 ->update([
@@ -414,7 +378,6 @@ class PaymentController extends Controller
                 'rows_updated' => $updated,
             ]);
 
-            // ✅ Verify it was saved
             $verify = DB::table('user')
                 ->where('User_ID', $user->User_ID)
                 ->value('stripe_payment_method_id');
@@ -423,11 +386,6 @@ class PaymentController extends Controller
                 throw new \Exception('Failed to save payment method to database');
             }
 
-            Log::info('✅ Payment method verified in database', [
-                'saved_value' => $verify,
-            ]);
-
-            // ✅ If trial (amount = 0), return success
             if ($amount == 0) {
                 return response()->json([
                     'success' => true,
@@ -438,7 +396,6 @@ class PaymentController extends Controller
                 ]);
             }
 
-            // ✅ For paid subscription, create payment intent
             $paymentIntent = \Stripe\PaymentIntent::create([
                 'amount' => $amount * 100,
                 'currency' => 'gbp',
@@ -471,79 +428,4 @@ class PaymentController extends Controller
             ], 500);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
