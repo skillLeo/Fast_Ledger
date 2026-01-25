@@ -9,33 +9,46 @@
                 <div class="col-xl-12">
                     @include('admin.partial.errors')
 
-                    <div class="card custom-card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
+                     <div class="card custom-card">
+                        <div class="card-header my-3 d-flex justify-content-between align-items-center">
                             <h4 class="page-title mb-0">Active Clients</h4>
-                            <div>
+ <div>
+ @php
+    use App\Models\Client;
 
-                                <a href="{{ route('clients.create') }}" class="btn btn-primary  btn-wave" role="button">
-                                    Add New
-                                </a>
-                                <a href="{{ route('clients.index', ['type' => 'archived']) }}" class="btn  btn-wave"
-                                    style="background-color: #75bfed; color: #fff; border: none;">Closed Clients</a>
+    $currentUser = auth()->user();               // logged-in user
+    $userRole = $currentUser->User_Role;         // role
+    $allowed_companies = $currentUser->allowed_companies;         // Assuming this is the column storing allowed companies
+    $companyCount = Client::where('agnt_admin_id', $currentUser->User_ID)->count();
+@endphp
 
-                            </div>
+<!-- Button to Create New Company -->
+@if ($userRole == 3 && $companyCount >= $allowed_companies)  {{-- If Agent Admin and has reached max companies --}}
+    <button class="btn btn-primary btn-wave" disabled>
+        + New Company (Max {{ $allowed_companies }} Companies)
+    </button>
+@else
+    <a href="{{ route('clients.create') }}" class="btn btn-primary btn-wave">
+        + New Company
+    </a>
+@endif
+
+
+    <a href="{{ route('clients.index', ['type' => 'archived']) }}" class="btn btn-wave" style="background-color: #75bfed; color: #fff; border: none;">
+        Inactive Clients
+    </a>
+</div>
+
+
 
                         </div>
 
-
-
-
                         <div class="card-body">
-
                             {{-- Search Bar --}}
-                            <form method="GET" action="{{ route('clients.index', request()->route('type')) }}"
-                                class="mb-3">
+                            <form method="GET" action="{{ route('clients.index', request()->route('type')) }}" class="mb-3">
                                 <div class="col-md-3">
                                     <div class="input-group col-md-3">
-                                        <input type="text" name="search" class="form-control"
-                                            placeholder="Search clients..." value="{{ request('search') }}">
+                                        <input type="text" name="search" class="form-control" placeholder="Search clients..." value="{{ request('search') }}">
                                         <button class="btn btn-outline-primary" type="submit">Search</button>
                                     </div>
                                 </div>
@@ -45,82 +58,57 @@
                                 <table class="table table-bordered table-striped text-nowrap table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Client Ref</th>
-                                            <th>Contact Name</th>
-                                            <th>Business Name</th>
-                                            <th>Address</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th class="text-center">Contact Name</th>
+                                            <th class="text-center">Business Name</th>
+                                            <th class="text-center">Address</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse ($clients as $client)
-                                            <tr>
-                                                <td>{{ $client->Client_Ref }}</td>
-                                                <td>{{ $client->Contact_Name }}</td>
-                                                <td>{{ $client->Business_Name }}</td>
-                                                <td>{{ $client->Address1 }}</td>
-                                                <td>
-                                                    <span
-                                                        class="badge hstack gap-2 fs-15 text-center mb-1 {{ $client->Is_Archive ? 'bg-secondary' : 'bg-primary' }}"
-                                                        style="cursor: pointer;" data-bs-toggle="modal"
-                                                        data-bs-target="#archiveModal-{{ $client->Client_ID }}">
+                                            <tr class="my-2">
+                                                <td class="text-start">{{ $client->Contact_Name }}</td>
+                                                <td class="text-start">{{ $client->Business_Name }}</td>
+                                                <td class="text-start">{{ $client->Address1 }}</td>
+                                                <td class="text-center">
+                                                    <span class="badge rounded-pill px-3 py-2 fw-semibold {{ $client->Is_Archive ? 'bg-secondary' : 'bg-success' }}"
+                                                        role="button" data-bs-toggle="modal" data-bs-target="#archiveModal-{{ $client->Client_ID }}">
                                                         {{ $client->Is_Archive ? 'Archived' : 'Active' }}
                                                     </span>
                                                 </td>
-
-                                                <td>
+                                                <td class="text-center">
                                                     @php
                                                         $adminUsers = $client->users->where('User_Role', 2);
                                                     @endphp
                                                     @foreach ($adminUsers as $adminUser)
-                                                        <div class="hstack gap-2 fs-15 text-center mb-1">
-                                                            <a href="{{ route('admin.users.banks', ['user' => $adminUser->User_ID]) }}"
-                                                                class="btn btn-sm btn-info">
-                                                                Manage Bank Account
-                                                            </a>
-
-
-                                                            <a href="{{ route('users.impersonate', ['id' => $adminUser->User_ID]) }}"
-                                                                class="btn btn-sm"
-                                                                style="background-color: #75bfed; color: #fff; border: none;">
-                                                                Authorized Login</a>
+                                                        <div class="d-flex justify-content-center gap-2">
                                                             <a href="{{ route('admin.login.as', ['id' => $adminUser->User_ID]) }}"
-                                                                class="btn btn-sm btn-primary">
-                                                                Admin Login
+                                                                class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin Login">
+                                                                Login
                                                             </a>
-
                                                         </div>
                                                     @endforeach
-
                                                 </td>
-                                                <!-- This modal must go INSIDE the loop -->
-                                                <div class="modal fade" id="archiveModal-{{ $client->Client_ID }}"
-                                                    tabindex="-1"
-                                                    aria-labelledby="archiveModalLabel-{{ $client->Client_ID }}"
-                                                    aria-hidden="true">
+
+                                                <!-- Modal for Archiving Client -->
+                                                <div class="modal fade" id="archiveModal-{{ $client->Client_ID }}" tabindex="-1"
+                                                    aria-labelledby="archiveModalLabel-{{ $client->Client_ID }}" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title"
-                                                                    id="archiveModalLabel-{{ $client->Client_ID }}">Confirm
-                                                                    Archive</h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <h5 class="modal-title" id="archiveModalLabel-{{ $client->Client_ID }}">Deactivate</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                Are you sure you want to archive this client?
+                                                                Are you sure you want to deactivate this client?
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <form
-                                                                    action="{{ route('clients.archive', $client->Client_ID) }}"
-                                                                    method="POST">
+                                                                <form action="{{ route('clients.archive', $client->Client_ID) }}" method="POST">
                                                                     @csrf
                                                                     @method('PATCH')
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Cancel</button>
-                                                                    <button type="submit" class="btn btn-warning">Yes,
-                                                                        Archive</button>
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-warning">Yes, Deactivate</button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -129,7 +117,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center">No clients found.</td>
+                                                <td colspan="5" class="text-center">No clients found.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -139,15 +127,12 @@
                             <!-- Pagination -->
                             <div class="d-flex justify-content-end mt-3">
                                 {{ $clients->withQueryString()->links('pagination::bootstrap-5') }}
-
                             </div>
 
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 @endsection
@@ -163,6 +148,5 @@
                 setTimeout(() => alert.remove(), 500); // Fully remove from DOM
             }
         }, 3000); // 3 seconds
-
     </script>
 @endsection

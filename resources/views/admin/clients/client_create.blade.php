@@ -6,8 +6,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card custom-card">
-                        <div class="card-header justify-content-between">
-                            <div class="page-title">Complete Form</div>
+                        <div class="card-header my-2 justify-content-between">
+                            <div class="page-title">Complete Form </div>
                             <div class="prism-toggle">
                                 <a href="{{ url()->previous() }}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-arrow-left me-1"></i> Back
@@ -62,6 +62,72 @@
                                             placeholder="Company Registration Number" />
                                     </div>
                                 </div>
+
+                                <!-- Row: Business Name and Company Reg No -->
+                                {{-- <div class="row mb-3">
+    <!-- Business Type Dropdown -->
+    <div class="col-md-6">
+        <label class="form-label">Business Type *</label>
+        <select class="form-control @error('Business_Type') is-invalid @enderror" name="Business_Type">
+            <option value="">Select Business Type</option>
+            <option value="Solicitor/Lawyer" {{ old('Business_Type') == 'Solicitor/Lawyer' ? 'selected' : '' }}>Solicitor/Lawyer</option>
+            <option value="Limited Company" {{ old('Business_Type') == 'Limited Company' ? 'selected' : '' }}>Limited Company</option>
+            <option value="Sole Trader" {{ old('Business_Type') == 'Sole Trader' ? 'selected' : '' }}>Sole Trader</option>
+        </select>
+        @error('Business_Type')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+
+    <!-- Business Category Dropdown -->
+    <div class="col-md-6">
+        <label class="form-label">Business Category *</label>
+        <select class="form-control @error('Business_Category') is-invalid @enderror" name="Business_Category">
+            <option value="">Select Business Category</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" {{ old('Business_Category') == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+        @error('Business_Category')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+                                </div> --}}
+
+                                <div class="row mb-3">
+    <!-- Business Type Dropdown -->
+    <div class="col-md-6">
+        <label class="form-label">Business Type *</label>
+        <select class="form-control select @error('Business_Type') is-invalid @enderror" name="Business_Type">
+            <option value="">Select Business Type</option>
+            <option value="Solicitor/Lawyer" {{ old('Business_Type') == 'Solicitor/Lawyer' ? 'selected' : '' }}>Solicitor/Lawyer</option>
+            <option value="Limited Company" {{ old('Business_Type') == 'Limited Company' ? 'selected' : '' }}>Limited Company</option>
+            <option value="Sole Trader" {{ old('Business_Type') == 'Sole Trader' ? 'selected' : '' }}>Sole Trader</option>
+        </select>
+        @error('Business_Type')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+
+    <!-- Business Category Dropdown (Static options) -->
+    <div class="col-md-6">
+        <label class="form-label">Business Category *</label>
+        <select class="form-control @error('Business_Category') is-invalid @enderror" name="Business_Category">
+            <option value="">Select Business Category</option>
+            <option value="1" {{ old('Business_Category') == '1' ? 'selected' : '' }}>Retail</option>
+            <option value="2" {{ old('Business_Category') == '2' ? 'selected' : '' }}>Services</option>
+            <option value="3" {{ old('Business_Category') == '3' ? 'selected' : '' }}>Manufacturing</option>
+            <option value="4" {{ old('Business_Category') == '4' ? 'selected' : '' }}>Technology</option>
+            <option value="5" {{ old('Business_Category') == '5' ? 'selected' : '' }}>Finance</option>
+        </select>
+        @error('Business_Category')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+    </div>
+</div>
+
 
                                 <!-- Address 1 -->
                                 <div class="mb-3">
@@ -198,6 +264,36 @@
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
                                     </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                   <div class="col-md-6"> 
+    <div class="form-check">
+        <input class="form-check-input"
+               type="checkbox" 
+               name="snd_lgn_to_slctr" 
+               value="true" 
+               {{ old('snd_lgn_to_slctr') ? 'checked' : '' }} />
+        <label class="form-check-label" for="sendDetails">
+            Send login details to "Solicitors"?
+        </label>
+    </div>
+    @error('snd_lgn_to_slctr')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        {{-- <label class="form-label"></label> --}}
+                                        <input type="hidden"
+       {{-- class="form-control"
+       name="agnt_admin_id"
+       value="{{ auth()->check() ? auth()->user()->id : '' }}" /> --}}
+                                        {{-- @error('AdminPassword')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror --}}
+                                    </div>
+
                                 </div>
 
                                 <!-- Submit Button -->

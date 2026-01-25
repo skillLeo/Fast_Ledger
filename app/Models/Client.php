@@ -55,11 +55,17 @@ class Client extends Model
     /**
      * Get all users belonging to this client.
      */
+    
     public function users()
     {
         return $this->hasMany(User::class, 'Client_ID', 'Client_ID');
     }
 
+
+    public function user()
+{
+    return $this->belongsTo(User::class, 'User_ID', 'id'); // Ensure the correct foreign and local keys
+}
     /**
      * Get all employees belonging to this client.
      */

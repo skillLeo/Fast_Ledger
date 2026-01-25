@@ -285,7 +285,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('clients')
         ->name('clients.')
         ->controller(ClientController::class)
-        ->middleware('role:superadmin')
+       ->middleware('role:superadmin,admin,agent_admin')
         ->group(function () {
             Route::get('create', 'create')->name('create');
             Route::get('/{type?}', 'index')->name('index');

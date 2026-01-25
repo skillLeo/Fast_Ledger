@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('client', function (Blueprint $table) {
             $table->integer('Client_ID')->primary();
+            $table->integer('agnt_admin_id')->primary();
             $table->string('Client_Ref', 20)->unique('client_ref');
             $table->string('Contact_Name', 50);
-            $table->string('Business_Name', 50)->nullable();
+            $table->string('Business_Name',50 )->nullable();
+            $table->string('Business_Type',50)->nullable();
+            $table->string('Business_Category',50)->nullable();
             $table->string('Address1');
             $table->string('Address2')->nullable();
             $table->string('Town', 50);
@@ -29,6 +32,7 @@ return new class extends Migration
             $table->string('VAT_Registration_No', 20)->nullable();
             $table->string('Contact_No', 20)->nullable();
             $table->decimal('Fee_Agreed', 12)->nullable();
+            $table->string('snd_lgn_to_slctr')->nullable();
             $table->integer('Created_By')->nullable();
             $table->dateTime('Created_On')->nullable();
             $table->integer('Modified_By')->nullable();

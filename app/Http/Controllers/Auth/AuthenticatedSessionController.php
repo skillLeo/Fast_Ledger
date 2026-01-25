@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Carbon\Carbon;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -36,9 +37,27 @@ class AuthenticatedSessionController extends Controller
         $companies = $user->companies()->get();
 
         if ($companies->isEmpty()) {
-            // ✅ No companies - redirect to company setup
-            return redirect()->route('company.setup.create');
+    // If the user's role is 3 (agent_admin), redirect to the payment route
+  if ($user->User_Role == 3) {
+
+            // Get the current date
+            $currentDate = Carbon::now();
+
+            // Check if the trial or subscription has ended
+            if ($user->trial_ent_at && Carbon::parse($user->trial_ent_at)->lt($currentDate) || 
+                $user->subscription_end_at && Carbon::parse($user->subscription_end_at)->lt($currentDate)) {
+                
+                // Redirect to the payment page if trial or subscription has ended
+                return redirect()->route('company.payment.create');
+            }
+
+            // If trial or subscription is still valid, redirect to the clients page
+            return redirect()->route('clients.index');
         }
+    
+    // If the role is not 3, redirect to company setup
+    return redirect()->route('company.setup.create');
+}
 
         // ✅ Check if user has selected a company in session
         if (!session()->has('current_company_id')) {

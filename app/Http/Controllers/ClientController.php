@@ -13,36 +13,41 @@ use App\DataTables\ClientDataTable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreClientRequest;
+use App\Mail\AgentAdminCreatedMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class ClientController extends Controller
 {
-     public function index(Request $request, $type = 'active')
-    {
-        $search = $request->input('search');
+ public function index(Request $request, $type = 'active')
+{
+    $search = $request->input('search');
+    $currentUser = auth()->user();
+    $companyCount = $currentUser->companies()->count(); // Count companies for the authenticated user
 
-        $clients = Client::with('users')
-            ->whereNull('deleted_on')
-            ->when($type === 'archived', function ($query) {
-                $query->where('is_archive', 1);
-            }, function ($query) {
-                $query->where('is_archive', 0);
-            })
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('Client_Ref', 'like', "%$search%")
-                        ->orWhere('Contact_Name', 'like', "%$search%")
-                        ->orWhere('Business_Name', 'like', "%$search%");
-                });
-            })
-            ->orderBy('client_ref')
-            ->paginate(10)
-            ->withQueryString(); // keeps search value in pagination
+    $clients = Client::with('users')
+        ->whereNull('deleted_on')
+        ->when($type === 'archived', function ($query) {
+            $query->where('is_archive', 1);
+        }, function ($query) {
+            $query->where('is_archive', 0);
+        })
+        ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('Client_Ref', 'like', "%$search%")
+                    ->orWhere('Contact_Name', 'like', "%$search%")
+                    ->orWhere('Business_Name', 'like', "%$search%");
+            });
+        })
+        ->orderBy('client_ref')
+        ->paginate(10)
+        ->withQueryString(); // keeps search value in pagination
 
-        $view = $type === 'archived' ? 'admin.clients.client_archieve' : 'admin.clients.client_active';
+    $view = $type === 'archived' ? 'admin.clients.client_archieve' : 'admin.clients.client_active';
 
-        return view($view, compact('clients', 'search'));
-    }
+    return view($view, compact('clients', 'search', 'companyCount'));
+}
+
 
     public function create()
     {
@@ -53,10 +58,25 @@ class ClientController extends Controller
 
      public function store(StoreClientRequest $request)
     {
+
+ if (!auth()->check()) { 
+        return redirect()->route('login')->with('error', 'You must be logged in.');
+    } 
+    $agntAdminId = auth()->user()->User_ID; 
+    if (is_null($agntAdminId)) { 
+        return redirect()->route('login')->with('error', 'Authentication error. Please log in again.');
+    }
+
+  
+
         $client = new Client();
+        
+        $client->agnt_admin_id = $agntAdminId;
         $client->Client_Ref = $request->Client_Ref;
         $client->Contact_Name = $request->Contact_Name;
         $client->Business_Name = $request->Business_Name;
+        $client->Business_Type = $request->Business_Type;
+        $client->Business_Category = $request->Business_Category;
         $client->Address1 = $request->Address1;
         $client->Address2 = $request->Address2;
         $client->Town = $request->Town;
@@ -70,6 +90,7 @@ class ClientController extends Controller
         $client->VAT_Registration_No = $request->VAT_Registration_No;
         $client->Contact_No = $request->Contact_No;
         $client->Fee_Agreed = $request->Fee_Agreed;
+        $client->snd_lgn_to_slctr = $request->snd_lgn_to_slctr;
         $client->Is_Archive = 0; // 0 = not archived
         $client->Created_By = Auth::id();
         $client->date_lock = null; // ✅ correct
@@ -89,6 +110,12 @@ class ClientController extends Controller
         $adminUser->Created_By = Auth::id();
         $adminUser->Created_On = now();
         $adminUser->save();
+
+        if ($request->snd_lgn_to_slctr == "true" && !empty($adminUser->email)) {
+        Mail::to($adminUser->email)->send(new AgentAdminCreatedMail($adminUser));
+}
+
+
 
         return redirect()->route('clients.index', 'active')
             ->with('success', 'Client and Admin User created successfully.');

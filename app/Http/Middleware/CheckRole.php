@@ -11,40 +11,41 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, string $role): Response
-    {   
-        if (!Auth::check()) {
-            return redirect()->route('sign-in'); 
-        }
-        
-        $roles = [
+  public function handle(Request $request, Closure $next, string ...$roles): Response
+{
+    if (!Auth::check()) {
+        return redirect()->route('sign-in');
+    }
+
+    // ✅ Role name => Role_ID mapping (your DB Role_ID values)
+    $roleMap = [
             'superadmin' => [1],
             'admin' => [3], // Agent Admin
             'client' => [2], // Entity Admin
             'companyuser' => [4], // Invoicing App
-        ];
+    ];
 
-        $allowedRoleIds = $roles[$role] ?? [];
+    // ✅ Get user role IDs from userrole table
+    $userRoleIds = DB::table('userrole')
+        ->where('User_ID', auth()->user()->User_ID)
+        ->pluck('Role_ID')
+        ->toArray();
 
-        // ✅ Get user's roles from userrole table
-        $userRoleIds = DB::table('userrole')
-            ->where('User_ID', auth()->user()->User_ID)
-            ->pluck('Role_ID')
-            ->toArray();
-
-        // ✅ Check if user has any of the allowed roles
-        $hasAccess = false;
-        foreach ($allowedRoleIds as $roleId) {
-            if (in_array($roleId, $userRoleIds)) {
-                $hasAccess = true;
-                break;
-            }
+    // ✅ Build allowed Role_IDs from all passed role names
+    $allowedRoleIds = [];
+    foreach ($roles as $r) {
+        $r = trim($r);
+        if (isset($roleMap[$r])) {
+            $allowedRoleIds = array_merge($allowedRoleIds, $roleMap[$r]);
         }
-
-        if (!$hasAccess) {
-            abort(403, 'Unauthorized access');
-        }
-
-        return $next($request);
     }
+    $allowedRoleIds = array_unique($allowedRoleIds);
+
+    // ✅ Check access
+    if (empty(array_intersect($userRoleIds, $allowedRoleIds))) {
+        abort(403, 'Unauthorized access');
+    }
+
+    return $next($request);
+}
 }

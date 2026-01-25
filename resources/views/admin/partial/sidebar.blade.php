@@ -1,3 +1,11 @@
+@php
+    $hideSidebar = request()->routeIs('clients.index')
+        && DB::table('userrole')
+            ->where('User_ID', auth()->user()->User_ID)
+            ->whereIn('Role_ID', [1,3])
+            ->exists();
+@endphp
+
 <aside class="app-sidebar sticky" id="sidebar">
     <!-- Sidebar Header -->
     <div class="main-sidebar-header">
@@ -22,7 +30,7 @@
         </div>
     </div>
 
-    <div class="main-sidebar" id="sidebar-scroll">
+    <div class="main-sidebar {{ $hideSidebar ? 'd-none' : '' }}" id="sidebar-scroll">
         <nav class="main-menu-container nav nav-pills flex-column sub-open">
             <ul class="main-menu">
                 <!-- Fast Books Group -->
