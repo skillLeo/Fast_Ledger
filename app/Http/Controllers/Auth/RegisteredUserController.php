@@ -20,8 +20,21 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.invoice-app-register');
     }
+
+
+     public function showAdminRegisterForm()
+    {
+        return view('auth.register', ['role' => 'entity_admin','agent_admin']);
+    }
+
+    // Show the registration form for invoicing app users
+    public function showInvoiceRegisterForm()
+    {
+        return view('auth.invoice-app-register', ['role' => 'invoicing_app']);
+    }
+
 
     /**
      * Handle an incoming registration request.

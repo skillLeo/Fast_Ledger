@@ -13,7 +13,7 @@
                         </div>
 
                         {{-- ✅ GLOBAL ERROR DISPLAY --}}
-                        @if ($errors->any())
+                         @if ($errors->any())
                             <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
                                 <strong>⚠️ Please fix the following errors:</strong>
                                 <ul class="mb-0 mt-2">

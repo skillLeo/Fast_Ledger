@@ -9,35 +9,45 @@
                 <div class="col-xl-12">
                     @include('admin.partial.errors')
 
-                     <div class="card custom-card">
+                    <div class="card custom-card">
                         <div class="card-header my-3 d-flex justify-content-between align-items-center">
                             <h4 class="page-title mb-0">Active Clients</h4>
  <div>
- @php
-    use App\Models\Client;
+    @php
+        use App\Models\Client;
 
-    $currentUser = auth()->user();               // logged-in user
-    $userRole = $currentUser->User_Role;         // role
-    $allowed_companies = $currentUser->allowed_companies;         // Assuming this is the column storing allowed companies
-    $companyCount = Client::where('agnt_admin_id', $currentUser->User_ID)->count();
-@endphp
+        $currentUser = auth()->user();
+        $userRole = $currentUser->User_Role;
+        $allowed_companies = $currentUser->allowed_companies;
 
-<!-- Button to Create New Company -->
-@if ($userRole == 3 && $companyCount >= $allowed_companies)  {{-- If Agent Admin and has reached max companies --}}
-    <button class="btn btn-primary btn-wave" disabled>
-        + New Company (Max {{ $allowed_companies }} Companies)
-    </button>
-@else
-    <a href="{{ route('clients.create') }}" class="btn btn-primary btn-wave">
-        + New Company
-    </a>
-@endif
+        // ✅ COUNT ONLY ACTIVE COMPANIES (Is_Archive = 0)
+        $companyCount = Client::where('agnt_admin_id', $currentUser->User_ID)
+            ->where('Is_Archive', 0)
+            ->count();
+    @endphp
 
+    {{-- Agent Admin reached ACTIVE company limit → open upgrade modal --}}
+    @if ($userRole == 3 && $companyCount >= $allowed_companies)
+        <button
+            class="btn btn-primary btn-wave"
+            data-bs-toggle="modal"
+            data-bs-target="#upgradePlanModal">
+            + New Company
+        </button>
+    @else
+        <a href="{{ route('clients.create') }}" class="btn btn-primary btn-wave">
+            + New Company
+        </a>
+    @endif
 
-    <a href="{{ route('clients.index', ['type' => 'archived']) }}" class="btn btn-wave" style="background-color: #75bfed; color: #fff; border: none;">
+    <a href="{{ route('clients.index', ['type' => 'archived']) }}"
+       class="btn btn-wave"
+       style="background-color: #75bfed; color: #fff; border: none;">
         Inactive Clients
     </a>
 </div>
+
+
 
 
 
@@ -48,7 +58,8 @@
                             <form method="GET" action="{{ route('clients.index', request()->route('type')) }}" class="mb-3">
                                 <div class="col-md-3">
                                     <div class="input-group col-md-3">
-                                        <input type="text" name="search" class="form-control" placeholder="Search clients..." value="{{ request('search') }}">
+                                        <input type="text" name="search" class="form-control"
+                                            placeholder="Search clients..." value="{{ request('search') }}">
                                         <button class="btn btn-outline-primary" type="submit">Search</button>
                                     </div>
                                 </div>
@@ -72,8 +83,10 @@
                                                 <td class="text-start">{{ $client->Business_Name }}</td>
                                                 <td class="text-start">{{ $client->Address1 }}</td>
                                                 <td class="text-center">
-                                                    <span class="badge rounded-pill px-3 py-2 fw-semibold {{ $client->Is_Archive ? 'bg-secondary' : 'bg-success' }}"
-                                                        role="button" data-bs-toggle="modal" data-bs-target="#archiveModal-{{ $client->Client_ID }}">
+                                                    <span
+                                                        class="badge rounded-pill px-3 py-2 fw-semibold {{ $client->Is_Archive ? 'bg-secondary' : 'bg-success' }}"
+                                                        role="button" data-bs-toggle="modal"
+                                                        data-bs-target="#archiveModal-{{ $client->Client_ID }}">
                                                         {{ $client->Is_Archive ? 'Archived' : 'Active' }}
                                                     </span>
                                                 </td>
@@ -84,7 +97,8 @@
                                                     @foreach ($adminUsers as $adminUser)
                                                         <div class="d-flex justify-content-center gap-2">
                                                             <a href="{{ route('admin.login.as', ['id' => $adminUser->User_ID]) }}"
-                                                                class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin Login">
+                                                                class="btn btn-sm btn-primary px-2" data-bs-toggle="tooltip"
+                                                                data-bs-placement="top" title="Admin Login">
                                                                 Login
                                                             </a>
                                                         </div>
@@ -93,22 +107,30 @@
 
                                                 <!-- Modal for Archiving Client -->
                                                 <div class="modal fade" id="archiveModal-{{ $client->Client_ID }}" tabindex="-1"
-                                                    aria-labelledby="archiveModalLabel-{{ $client->Client_ID }}" aria-hidden="true">
+                                                    aria-labelledby="archiveModalLabel-{{ $client->Client_ID }}"
+                                                    aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="archiveModalLabel-{{ $client->Client_ID }}">Deactivate</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <h5 class="modal-title"
+                                                                    id="archiveModalLabel-{{ $client->Client_ID }}">Deactivate
+                                                                </h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
                                                                 Are you sure you want to deactivate this client?
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <form action="{{ route('clients.archive', $client->Client_ID) }}" method="POST">
+                                                                <form
+                                                                    action="{{ route('clients.archive', $client->Client_ID) }}"
+                                                                    method="POST">
                                                                     @csrf
                                                                     @method('PATCH')
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                                    <button type="submit" class="btn btn-warning">Yes, Deactivate</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-warning">Yes,
+                                                                        Deactivate</button>
                                                                 </form>
                                                             </div>
                                                         </div>
@@ -135,12 +157,50 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="upgradePlanModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Upgrade Required</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <p class="mb-2 fw-semibold">
+                    You have reached your company limit.
+                </p>
+                <p class="text-muted mb-0">
+                    Your current plan allows up to
+                    <strong>{{ $allowed_companies }}</strong> companies.
+                    Please upgrade your plan to add more.
+                </p>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <a href="{{ route('company.payment.create') }}"
+                   class="btn btn-primary px-4">
+                    Upgrade Plan
+                </a>
+                <button type="button"
+                        class="btn btn-outline-dark"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 @endsection
 
 
 @section('scripts')
     <script>
-        setTimeout(function() {
+        setTimeout(function () {
             let alert = document.getElementById('success-alert');
             if (alert) {
                 alert.style.transition = "opacity 0.5s ease";

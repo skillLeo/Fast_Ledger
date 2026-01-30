@@ -68,11 +68,11 @@
 
                         <!-- Role Selection - NEW -->
                         <div class="col-12 mb-3">
-                            <label class="form-label text-default fw-bold">Select Account Type</label>
-                            <div class="row g-3">
+                            {{-- <label class="form-label text-default fw-bold">Invoicing App</label> --}}
+                            {{-- <div class="row g-3"> --}}
                                 
                                 <!-- Agent Admin -->
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-4">
                                     <label class="role-card" for="role_agent">
                                         <input type="radio" 
                                                name="account_type" 
@@ -89,7 +89,7 @@
                                 </div>
 
                                 <!-- Entity Admin -->
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="role-card" for="role_entity">
                                         <input type="radio" 
                                                name="account_type" 
@@ -103,26 +103,26 @@
                                             Manage your company's accounting
                                         </div>
                                     </label>
-                                </div>
+                                </div> --}}
 
                                 <!-- Invoicing App -->
                                 {{-- <div class="col-md-4">
-                                    <label class="role-card" for="role_invoicing">
-                                        <input type="radio" 
+                                    <label class="role-card" for="role_invoicing"> --}}
+                                        <input type="hidden" 
                                                name="account_type" 
                                                id="role_invoicing" 
                                                value="invoicing_app"
                                                {{ old('account_type', 'invoicing_app') == 'invoicing_app' ? 'checked' : '' }}
                                                required>
-                                        <div class="role-icon">📄</div>
-                                        <div class="role-title">Invoicing App</div>
-                                        <div class="role-description">
+                                        {{-- <div class="role-icon">📄</div> --}}
+                                        {{-- <div class="role-title">Invoicing App</div> --}}
+                                        {{-- <div class="role-description">
                                             Create invoices and manage inventory
-                                        </div>
-                                    </label>
+                                        </div> --}}
+                                    {{-- </label>
                                 </div> --}}
 
-                            </div>
+                            {{-- </div> --}}
                             @error('account_type')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror

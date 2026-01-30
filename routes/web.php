@@ -27,6 +27,7 @@ use App\Http\Controllers\{
     BulkTransactionController,
     ChartsOfAccountController,
 };
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Report\{
     VatReportController,
     ProfitLossController,
@@ -554,6 +555,15 @@ Route::get('/clear-all-cache', function () {
     Artisan::call('optimize:clear');
     return "All caches cleared successfully!";
 });
+
+
+
+// saperate registration :
+
+Route::get('register/admin', [RegisteredUserController::class, 'showAdminRegisterForm'])->name('register.admin');
+Route::get('register/invoice', [RegisteredUserController::class, 'showInvoiceRegisterForm'])->name('register.invoice');
+
+
 
 require __DIR__ . '/hmrc.php';
 

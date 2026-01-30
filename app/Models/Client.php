@@ -35,7 +35,18 @@ class Client extends Model
         'Deleted_On',
         'Is_Archive',
         'date_lock',
-        'transaction_lock'
+        'transaction_lock',
+        'Tax_Regime',
+
+        'Company_Name','Trade_Name','Country','Company_Type_UK','Company_Type_ES','Tax_ID',
+        'Country_Tax_Residence','Tax_Regime','Street_Address','City','State','Postal_Code',
+        'owner_Name','you_vat_reg','VAT_Registration_No','vat_scheme',
+        'officially_start','date_want_your_books','date_self_assessment_tax_ret','vat_return_due',
+
+        // add these only if columns exist in DB:
+        'Business_Name','Business_Type','Business_Category','Address1','Address2','Town',
+        'Country_ID','Post_Code','Phone','Email','Contact_No','AdminUserName','AdminPassword',
+        'snd_lgn_to_slctr',
     ];
 
     public $timestamps = false;
@@ -44,6 +55,7 @@ class Client extends Model
         'Created_On',
         'Modified_On',
         'Deleted_On',
+        
 
     ];
 

@@ -14,13 +14,15 @@ class AgentAdminCreatedMail extends Mailable
     use Queueable, SerializesModels;
 
     public $adminUser;
+    public $plainPassword; // Add the plainPassword property
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $adminUser)
+    public function __construct(User $adminUser, $plainPassword)
     {
         $this->adminUser = $adminUser;  // Assign the passed admin user data to the class property
+        $this->plainPassword = $plainPassword; // Store the plain password
     }
 
     /**
@@ -37,15 +39,15 @@ class AgentAdminCreatedMail extends Mailable
      * Get the message content definition.
      */
     public function content(): Content
-{
-    return new Content(
-        view: 'admin.emails.adminUserCreated', // Correct view path
-        with: [
-            'adminUserName' => $this->adminUser->User_Name,
-            'adminPassword' => $this->adminUser->password,
-        ]
-    );
-}
+    {
+        return new Content(
+            view: 'admin.emails.adminUserCreated', // Correct view path
+            with: [
+                'adminUserName' => $this->adminUser->email, // Passing admin user name
+                'adminPassword' => $this->plainPassword, // Passing the plain password
+            ]
+        );
+    }
 
     /**
      * Get the attachments for the message.

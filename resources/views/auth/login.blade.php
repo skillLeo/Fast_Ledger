@@ -106,12 +106,12 @@
                         </div>
 
                         <!-- Footer Text -->
-                        <div class="text-center">
+                        {{-- <div class="text-center">
                             <p class="text-muted mt-3 mb-0">
                                 Don't have an account? <a href="{{ route('register') }}" class="text-primary">Sign
                                     Up</a>
                             </p>
-                        </div>
+                        </div> --}}
                 </x-form>
             </x-form-card>
         </div>
